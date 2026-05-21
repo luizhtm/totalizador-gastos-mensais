@@ -23,6 +23,7 @@ O Pico CSS entra como base visual leve para formularios, botoes, tabelas e estad
 - Permite filtrar ou trocar o mes de referencia.
 - Pode exportar um resumo simples para conferencia ou compartilhamento.
 - Permite exportar e importar os dados em um arquivo `.gastos.json`, para backup, migracao entre maquinas ou guarda pessoal.
+- Permite importar extratos OFX do banco, revisar os gastos extraidos e salvar varios itens de uma vez.
 
 ## Campos de um gasto
 
@@ -130,6 +131,7 @@ Primeira versao:
 - Resumo por categoria.
 - Persistencia local.
 - Importacao e exportacao em `.gastos.json`.
+- Importacao OFX com revisao antes de salvar.
 - Layout responsivo para celular e desktop.
 
 Possiveis evolucoes:

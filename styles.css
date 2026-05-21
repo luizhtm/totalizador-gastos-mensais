@@ -235,6 +235,83 @@ button,
   margin: 0;
 }
 
+.import-review {
+  margin-bottom: 1rem;
+}
+
+.import-review[hidden] {
+  display: none;
+}
+
+.import-review-heading {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.import-review-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.import-review-actions strong {
+  color: var(--app-text);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.import-review-body {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.import-draft {
+  background: var(--app-surface-soft);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(7rem, 0.25fr) minmax(0, 1fr);
+  margin: 0;
+  padding: 0.9rem;
+}
+
+.import-draft-duplicate {
+  opacity: 0.68;
+}
+
+.import-draft-select {
+  align-self: center;
+  font-weight: 700;
+  margin: 0;
+}
+
+.import-draft-fields {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: minmax(8.5rem, 0.8fr) minmax(12rem, 1.4fr) minmax(10rem, 1fr) minmax(7rem, 0.7fr);
+}
+
+.import-draft-fields label {
+  margin-bottom: 0;
+}
+
+.import-draft-fields input,
+.import-draft-fields select {
+  margin-bottom: 0;
+}
+
+.import-draft-description {
+  color: var(--app-text-muted);
+  font-size: 0.88rem;
+  grid-column: 2;
+  margin: -0.35rem 0 0;
+}
+
 .form-row {
   display: grid;
   gap: 0.75rem;
@@ -287,6 +364,16 @@ input[type="reset"]:hover {
 .file-control:hover {
   background: var(--app-accent-dark);
   border-color: var(--app-accent-dark);
+}
+
+.file-control-secondary {
+  background: #14804a;
+  border-color: #14804a;
+}
+
+.file-control-secondary:hover {
+  background: #0f663a;
+  border-color: #0f663a;
 }
 
 .file-control input {
@@ -484,6 +571,30 @@ tbody tr:last-child td {
   .action-panel-controls {
     justify-content: flex-start;
   }
+
+  .import-review-heading,
+  .import-review-actions {
+    display: block;
+  }
+
+  .import-review-actions button,
+  .import-review-actions strong {
+    margin-top: 0.65rem;
+    width: 100%;
+  }
+
+  .import-draft,
+  .import-draft-description {
+    grid-column: 1;
+  }
+
+  .import-draft {
+    grid-template-columns: 1fr;
+  }
+
+  .import-draft-fields {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -499,8 +610,13 @@ tbody tr:last-child td {
 
   .form-actions button,
   .action-panel-controls button,
+  .import-review-actions button,
   .file-control {
     width: 100%;
+  }
+
+  .import-draft-fields {
+    grid-template-columns: 1fr;
   }
 
   .backup-options {

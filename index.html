@@ -72,6 +72,11 @@
             Importar arquivo
             <input id="importInput" type="file" accept=".json,.gastos.json,application/json">
           </label>
+
+          <label class="file-control file-control-secondary" for="ofxInput" role="button">
+            Importar OFX
+            <input id="ofxInput" type="file" accept=".ofx,.qfx,application/x-ofx,text/plain">
+          </label>
         </div>
 
         <div class="backup-options">
@@ -81,6 +86,22 @@
           </label>
           <span>Desligue para substituir os dados salvos neste navegador.</span>
         </div>
+      </section>
+
+      <section id="importReviewSection" class="import-review panel" hidden>
+        <header class="panel-heading import-review-heading">
+          <div>
+            <h2>Revisar importacao OFX</h2>
+            <p id="importReviewHint">Confira os gastos antes de salvar.</p>
+          </div>
+          <div class="import-review-actions">
+            <strong id="importSelectedSummary">0 selecionados</strong>
+            <button id="confirmOfxImportButton" type="button" disabled>Importar selecionados</button>
+            <button id="cancelOfxImportButton" class="secondary" type="button">Cancelar</button>
+          </div>
+        </header>
+
+        <div id="importReviewBody" class="import-review-body"></div>
       </section>
 
       <section class="content-grid">
