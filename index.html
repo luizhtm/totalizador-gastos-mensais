@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Totalizador de gastos mensais simples, estatico e publicavel no GitHub Pages."
+    >
+    <title>Totalizador de Gastos Mensais</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="container app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Organizacao mensal</p>
+          <h1>Totalizador de gastos</h1>
+          <p>
+            Registre gastos do mes, acompanhe o total e entenda rapidamente
+            para onde o dinheiro foi.
+          </p>
+        </div>
+
+        <div class="month-panel" aria-label="Mes de referencia">
+          <label for="monthInput">Mes de referencia</label>
+          <input id="monthInput" type="month">
+        </div>
+      </header>
+
+      <section class="summary-grid" aria-label="Resumo do mes">
+        <article class="summary-card summary-card-total">
+          <span>Total do mes</span>
+          <strong id="totalAmount">R$ 0,00</strong>
+        </article>
+
+        <article class="summary-card">
+          <span>Gastos cadastrados</span>
+          <strong id="expenseCount">0</strong>
+        </article>
+
+        <article class="summary-card">
+          <span>Maior categoria</span>
+          <strong id="topCategory">-</strong>
+        </article>
+      </section>
+
+      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+
+      <section class="workspace-grid">
+        <article class="panel">
+          <header class="panel-heading">
+            <h2 id="formTitle">Adicionar gasto</h2>
+            <p>Use categorias fixas para manter o resumo consistente.</p>
+          </header>
+
+          <form id="expenseForm">
+            <input id="expenseId" type="hidden">
+
+            <label for="nameInput">
+              Nome do item
+              <input
+                id="nameInput"
+                name="name"
+                type="text"
+                placeholder="Ex.: mercado, aluguel, internet"
+                autocomplete="off"
+                required
+              >
+            </label>
+
+            <div class="form-row">
+              <label for="categoryInput">
+                Categoria
+                <select id="categoryInput" name="category" required></select>
+              </label>
+
+              <label for="valueInput">
+                Valor
+                <input
+                  id="valueInput"
+                  name="value"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  inputmode="decimal"
+                  placeholder="0,00"
+                  required
+                >
+              </label>
+            </div>
+
+            <label for="descriptionInput">
+              Descricao
+              <textarea
+                id="descriptionInput"
+                name="description"
+                rows="3"
+                placeholder="Opcional"
+              ></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button id="submitButton" type="submit">Adicionar</button>
+              <button id="cancelEditButton" class="secondary" type="button" hidden>
+                Cancelar edicao
+              </button>
+            </div>
+          </form>
+        </article>
+
+        <article class="panel">
+          <header class="panel-heading">
+            <h2>Backup</h2>
+            <p>Exporte ou importe seus dados em um arquivo .gastos.json.</p>
+          </header>
+
+          <div class="backup-actions">
+            <button id="exportButton" type="button" class="secondary">
+              Exportar dados
+            </button>
+
+            <label class="file-control" for="importInput" role="button">
+              Importar arquivo
+              <input id="importInput" type="file" accept=".json,.gastos.json,application/json">
+            </label>
+          </div>
+
+          <label class="merge-control" for="mergeImportInput">
+            <input id="mergeImportInput" type="checkbox" role="switch" checked>
+            Mesclar dados importados com os atuais
+          </label>
+
+          <p class="help-text">
+            Se a mesclagem estiver desligada, a importacao substitui os dados
+            salvos neste navegador.
+          </p>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel">
+          <header class="panel-heading">
+            <h2>Resumo por categoria</h2>
+            <p id="categorySummaryHint">Nenhum gasto cadastrado neste mes.</p>
+          </header>
+          <div id="categorySummary" class="category-summary"></div>
+        </article>
+
+        <article class="panel">
+          <header class="panel-heading list-heading">
+            <div>
+              <h2>Gastos do mes</h2>
+              <p id="expenseListHint">Nenhum gasto cadastrado neste mes.</p>
+            </div>
+            <button id="clearMonthButton" class="outline danger-button" type="button">
+              Limpar mes
+            </button>
+          </header>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Categoria</th>
+                  <th class="numeric">Valor</th>
+                  <th class="actions-cell">Acoes</th>
+                </tr>
+              </thead>
+              <tbody id="expenseTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
