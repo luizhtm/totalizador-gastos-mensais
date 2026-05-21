@@ -135,19 +135,60 @@ body {
   display: none;
 }
 
-.workspace-grid,
 .content-grid {
   display: grid;
   gap: 1rem;
 }
 
-.workspace-grid {
-  grid-template-columns: minmax(0, 1.5fr) minmax(18rem, 0.8fr);
-  margin-bottom: 1rem;
-}
-
 .content-grid {
   grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.4fr);
+}
+
+.action-panel {
+  align-items: center;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.75rem 1.75rem rgba(15, 23, 42, 0.05);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.action-panel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.action-panel p,
+.backup-options span {
+  color: var(--app-text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.action-panel-controls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.action-panel-controls button,
+.action-panel-controls .file-control {
+  margin: 0;
+}
+
+.backup-options {
+  align-items: center;
+  border-top: 1px solid #edf0f5;
+  display: flex;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+  padding-top: 0.85rem;
 }
 
 .panel {
@@ -177,8 +218,7 @@ body {
   grid-template-columns: minmax(0, 1fr) minmax(8rem, 0.55fr);
 }
 
-.form-actions,
-.backup-actions {
+.form-actions {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -202,7 +242,6 @@ input[type="reset"]:hover {
 }
 
 .form-actions button,
-.backup-actions button,
 .file-control {
   margin-bottom: 0;
 }
@@ -231,7 +270,7 @@ input[type="reset"]:hover {
 }
 
 .merge-control {
-  margin-top: 1rem;
+  margin: 0;
 }
 
 .list-heading {
@@ -343,16 +382,81 @@ tbody tr:last-child td {
   text-align: center;
 }
 
+.expense-dialog {
+  border: 0;
+  border-radius: 0.6rem;
+  box-shadow: 0 1.5rem 4rem rgba(15, 23, 42, 0.24);
+  max-width: min(42rem, calc(100vw - 2rem));
+  padding: 0;
+  width: 42rem;
+}
+
+.expense-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.expense-dialog article {
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+.modal-heading {
+  align-items: start;
+  background: var(--app-surface-soft);
+  border-bottom: 1px solid var(--app-border);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1.1rem 1.25rem;
+}
+
+.modal-heading h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.2rem;
+}
+
+.modal-heading p {
+  color: var(--app-text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.close-button {
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+}
+
+.modal-form {
+  padding: 1.25rem;
+}
+
+.modal-form textarea {
+  min-height: 7rem;
+}
+
+.modal-form footer {
+  border-top: 1px solid #edf0f5;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+}
+
 @media (max-width: 900px) {
   .app-header,
   .summary-grid,
-  .workspace-grid,
+  .action-panel,
   .content-grid {
     grid-template-columns: 1fr;
   }
 
   .summary-card strong {
     font-size: 1.45rem;
+  }
+
+  .action-panel-controls {
+    justify-content: flex-start;
   }
 }
 
@@ -368,9 +472,32 @@ tbody tr:last-child td {
   }
 
   .form-actions button,
-  .backup-actions button,
+  .action-panel-controls button,
   .file-control {
     width: 100%;
+  }
+
+  .backup-options {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .expense-dialog {
+    max-width: calc(100vw - 1rem);
+    width: calc(100vw - 1rem);
+  }
+
+  .modal-heading {
+    display: block;
+  }
+
+  .close-button {
+    margin-top: 0.75rem;
+    width: 100%;
+  }
+
+  .modal-form footer {
+    display: block;
   }
 
   .actions-cell {

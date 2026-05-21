@@ -53,14 +53,85 @@
 
       <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
 
-      <section class="workspace-grid">
+      <section class="action-panel" aria-label="Acoes do totalizador">
+        <div>
+          <h2>Gastos do mes</h2>
+          <p>Adicione novos itens quando precisar e mantenha os backups por arquivo.</p>
+        </div>
+
+        <div class="action-panel-controls">
+          <button id="openExpenseDialogButton" type="button">
+            Adicionar gasto
+          </button>
+
+          <button id="exportButton" type="button" class="secondary">
+            Exportar dados
+          </button>
+
+          <label class="file-control" for="importInput" role="button">
+            Importar arquivo
+            <input id="importInput" type="file" accept=".json,.gastos.json,application/json">
+          </label>
+        </div>
+
+        <div class="backup-options">
+          <label class="merge-control" for="mergeImportInput">
+            <input id="mergeImportInput" type="checkbox" role="switch" checked>
+            Mesclar dados importados
+          </label>
+          <span>Desligue para substituir os dados salvos neste navegador.</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
         <article class="panel">
           <header class="panel-heading">
-            <h2 id="formTitle">Adicionar gasto</h2>
-            <p>Use categorias fixas para manter o resumo consistente.</p>
+            <h2>Resumo por categoria</h2>
+            <p id="categorySummaryHint">Nenhum gasto cadastrado neste mes.</p>
+          </header>
+          <div id="categorySummary" class="category-summary"></div>
+        </article>
+
+        <article class="panel">
+          <header class="panel-heading list-heading">
+            <div>
+              <h2>Itens cadastrados</h2>
+              <p id="expenseListHint">Nenhum gasto cadastrado neste mes.</p>
+            </div>
+            <button id="clearMonthButton" class="outline danger-button" type="button">
+              Limpar mes
+            </button>
           </header>
 
-          <form id="expenseForm">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Categoria</th>
+                  <th class="numeric">Valor</th>
+                  <th class="actions-cell">Acoes</th>
+                </tr>
+              </thead>
+              <tbody id="expenseTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <dialog id="expenseDialog" class="expense-dialog">
+        <article>
+          <header class="modal-heading">
+            <div>
+              <h2 id="formTitle">Adicionar gasto</h2>
+              <p>Use categorias fixas para manter o resumo consistente.</p>
+            </div>
+            <button id="closeDialogButton" class="outline contrast close-button" type="button" aria-label="Fechar">
+              Fechar
+            </button>
+          </header>
+
+          <form id="expenseForm" class="modal-form">
             <input id="expenseId" type="hidden">
 
             <label for="nameInput">
@@ -106,79 +177,15 @@
               ></textarea>
             </label>
 
-            <div class="form-actions">
+            <footer class="form-actions">
               <button id="submitButton" type="submit">Adicionar</button>
-              <button id="cancelEditButton" class="secondary" type="button" hidden>
-                Cancelar edicao
+              <button id="cancelEditButton" class="secondary" type="button">
+                Cancelar
               </button>
-            </div>
+            </footer>
           </form>
         </article>
-
-        <article class="panel">
-          <header class="panel-heading">
-            <h2>Backup</h2>
-            <p>Exporte ou importe seus dados em um arquivo .gastos.json.</p>
-          </header>
-
-          <div class="backup-actions">
-            <button id="exportButton" type="button" class="secondary">
-              Exportar dados
-            </button>
-
-            <label class="file-control" for="importInput" role="button">
-              Importar arquivo
-              <input id="importInput" type="file" accept=".json,.gastos.json,application/json">
-            </label>
-          </div>
-
-          <label class="merge-control" for="mergeImportInput">
-            <input id="mergeImportInput" type="checkbox" role="switch" checked>
-            Mesclar dados importados com os atuais
-          </label>
-
-          <p class="help-text">
-            Se a mesclagem estiver desligada, a importacao substitui os dados
-            salvos neste navegador.
-          </p>
-        </article>
-      </section>
-
-      <section class="content-grid">
-        <article class="panel">
-          <header class="panel-heading">
-            <h2>Resumo por categoria</h2>
-            <p id="categorySummaryHint">Nenhum gasto cadastrado neste mes.</p>
-          </header>
-          <div id="categorySummary" class="category-summary"></div>
-        </article>
-
-        <article class="panel">
-          <header class="panel-heading list-heading">
-            <div>
-              <h2>Gastos do mes</h2>
-              <p id="expenseListHint">Nenhum gasto cadastrado neste mes.</p>
-            </div>
-            <button id="clearMonthButton" class="outline danger-button" type="button">
-              Limpar mes
-            </button>
-          </header>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Categoria</th>
-                  <th class="numeric">Valor</th>
-                  <th class="actions-cell">Acoes</th>
-                </tr>
-              </thead>
-              <tbody id="expenseTableBody"></tbody>
-            </table>
-          </div>
-        </article>
-      </section>
+      </dialog>
     </main>
   </body>
 </html>

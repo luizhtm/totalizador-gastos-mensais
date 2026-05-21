@@ -27,6 +27,8 @@ const state = {
 
 const elements = {
   monthInput: document.querySelector("#monthInput"),
+  openExpenseDialogButton: document.querySelector("#openExpenseDialogButton"),
+  expenseDialog: document.querySelector("#expenseDialog"),
   expenseForm: document.querySelector("#expenseForm"),
   expenseId: document.querySelector("#expenseId"),
   nameInput: document.querySelector("#nameInput"),
@@ -36,6 +38,7 @@ const elements = {
   formTitle: document.querySelector("#formTitle"),
   submitButton: document.querySelector("#submitButton"),
   cancelEditButton: document.querySelector("#cancelEditButton"),
+  closeDialogButton: document.querySelector("#closeDialogButton"),
   totalAmount: document.querySelector("#totalAmount"),
   expenseCount: document.querySelector("#expenseCount"),
   topCategory: document.querySelector("#topCategory"),
@@ -65,11 +68,18 @@ function bindEvents() {
     state.selectedMonth = elements.monthInput.value || getCurrentMonth();
     saveState();
     resetForm();
+    closeExpenseDialog();
     render();
   });
 
+  elements.openExpenseDialogButton.addEventListener("click", () => {
+    resetForm();
+    openExpenseDialog();
+  });
   elements.expenseForm.addEventListener("submit", handleFormSubmit);
-  elements.cancelEditButton.addEventListener("click", resetForm);
+  elements.cancelEditButton.addEventListener("click", closeExpenseDialog);
+  elements.closeDialogButton.addEventListener("click", closeExpenseDialog);
+  elements.expenseDialog.addEventListener("close", resetForm);
   elements.exportButton.addEventListener("click", exportBackup);
   elements.importInput.addEventListener("change", importBackup);
   elements.clearMonthButton.addEventListener("click", clearSelectedMonth);
@@ -127,6 +137,7 @@ function handleFormSubmit(event) {
 
   saveState();
   resetForm();
+  closeExpenseDialog();
   render();
 }
 
@@ -162,7 +173,7 @@ function startEdit(id) {
   elements.descriptionInput.value = expense.description || "";
   elements.formTitle.textContent = "Editar gasto";
   elements.submitButton.textContent = "Salvar alteracoes";
-  elements.cancelEditButton.hidden = false;
+  openExpenseDialog();
   elements.nameInput.focus();
   render();
 }
@@ -173,7 +184,18 @@ function resetForm() {
   elements.categoryInput.value = CATEGORIES[0];
   elements.formTitle.textContent = "Adicionar gasto";
   elements.submitButton.textContent = "Adicionar";
-  elements.cancelEditButton.hidden = true;
+}
+
+function openExpenseDialog() {
+  if (!elements.expenseDialog.open) {
+    elements.expenseDialog.showModal();
+  }
+}
+
+function closeExpenseDialog() {
+  if (elements.expenseDialog.open) {
+    elements.expenseDialog.close();
+  }
 }
 
 function removeExpense(id) {
