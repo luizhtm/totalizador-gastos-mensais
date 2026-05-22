@@ -716,7 +716,6 @@ dialog.expense-dialog article > .modal-heading {
   .app-header,
   .summary-grid,
   .action-panel,
-  .privacy-strip,
   .content-grid {
     grid-template-columns: 1fr;
   }
@@ -729,7 +728,13 @@ dialog.expense-dialog article > .modal-heading {
     justify-content: flex-start;
   }
 
+  .privacy-strip {
+    align-items: start;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
   .privacy-tags {
+    grid-column: 1 / -1;
     justify-content: flex-start;
   }
 
