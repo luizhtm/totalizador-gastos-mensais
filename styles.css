@@ -907,7 +907,77 @@ dialog.expense-dialog article > .modal-heading {
     white-space: normal;
   }
 
-  .table-wrap,
+  .category-row-header {
+    align-items: start;
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .category-row-header span {
+    white-space: normal;
+  }
+
+  .table-wrap {
+    overflow-x: visible;
+  }
+
+  .table-wrap table,
+  .table-wrap thead,
+  .table-wrap tbody,
+  .table-wrap tr,
+  .table-wrap td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-wrap thead {
+    display: none;
+  }
+
+  .table-wrap tbody tr {
+    border-bottom: 1px solid #edf0f5;
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.85rem 0;
+  }
+
+  .table-wrap tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .table-wrap tbody td {
+    border-bottom: 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  .table-wrap tbody td:not(:first-child) {
+    align-items: baseline;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+  }
+
+  .table-wrap tbody td::before {
+    color: var(--app-text-muted);
+    content: attr(data-label);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .table-wrap tbody td:first-child::before,
+  .table-wrap tbody td.empty-state::before {
+    content: none;
+  }
+
+  .actions-cell {
+    min-width: 0;
+  }
+
+  .row-actions {
+    flex: 1 1 auto;
+  }
+
   .import-review-body {
     max-width: 100%;
     overflow-x: auto;

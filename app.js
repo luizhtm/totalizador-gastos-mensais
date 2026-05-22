@@ -357,13 +357,13 @@ function renderExpenseTable(expenses) {
 
   elements.expenseTableBody.innerHTML = sortedExpenses.map((expense) => `
     <tr>
-      <td>
+      <td data-label="Item">
         <span class="item-title">${escapeHtml(expense.name)}</span>
         ${expense.description ? `<span class="item-description">${escapeHtml(expense.description)}</span>` : ""}
       </td>
-      <td>${escapeHtml(expense.category)}</td>
-      <td class="numeric">${formatCurrency(expense.value)}</td>
-      <td class="actions-cell">
+      <td data-label="Categoria">${escapeHtml(expense.category)}</td>
+      <td class="numeric" data-label="Valor">${formatCurrency(expense.value)}</td>
+      <td class="actions-cell" data-label="Ações">
         <div class="row-actions">
           <button class="secondary" type="button" data-action="edit" data-id="${expense.id}">
             Editar
