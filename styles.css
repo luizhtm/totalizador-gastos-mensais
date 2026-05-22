@@ -171,6 +171,14 @@ button,
   grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.4fr);
 }
 
+@media (min-width: 901px) {
+  .category-panel {
+    align-self: start;
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
 .action-panel {
   align-items: center;
   background: var(--app-surface);
