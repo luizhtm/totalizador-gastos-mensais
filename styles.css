@@ -254,6 +254,29 @@ button,
   padding-top: 0.85rem;
 }
 
+@media (max-width: 1180px) {
+  .action-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .action-panel-controls {
+    justify-content: flex-start;
+  }
+
+  .import-review-actions {
+    justify-content: flex-start;
+  }
+
+  .import-review-primary-action {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .panel {
   margin: 0;
   padding: clamp(1rem, 2vw, 1.25rem);
@@ -678,7 +701,7 @@ dialog.expense-dialog article > .modal-heading {
   }
 
   .import-review-primary-action {
-    flex: 1 1 18rem;
+    flex: 1 1 100%;
     justify-content: flex-start;
   }
 
