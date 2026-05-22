@@ -195,8 +195,14 @@ button,
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 1;
+  list-style: none;
+  margin: 0;
   padding: 0.45rem 0.6rem;
   white-space: nowrap;
+}
+
+.privacy-tags li::before {
+  content: none;
 }
 
 .summary-grid {
