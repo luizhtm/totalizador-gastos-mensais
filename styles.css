@@ -846,3 +846,70 @@ dialog.expense-dialog article > .modal-heading {
     flex-direction: column;
   }
 }
+
+@media (max-width: 400px) {
+  .app-shell {
+    padding-block: 1.5rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .app-header p,
+  .privacy-strip p,
+  .action-panel p,
+  .backup-options span {
+    font-size: 0.86rem;
+  }
+
+  .month-panel,
+  .panel,
+  .summary-card,
+  .action-panel,
+  .privacy-strip {
+    padding: 0.85rem;
+  }
+
+  .privacy-strip {
+    gap: 0.75rem;
+  }
+
+  .privacy-mark {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .privacy-mark svg {
+    height: 1.1rem;
+    width: 1.1rem;
+  }
+
+  .privacy-tags {
+    gap: 0.35rem;
+  }
+
+  .privacy-tags li {
+    font-size: 0.74rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .import-review-heading {
+    margin-inline: -0.85rem;
+    padding: 0.85rem;
+  }
+
+  .import-review-primary-action {
+    align-items: stretch;
+  }
+
+  .import-review-actions strong {
+    white-space: normal;
+  }
+
+  .table-wrap,
+  .import-review-body {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
