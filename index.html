@@ -13,8 +13,8 @@
     <link rel="canonical" href="https://luizhtm.github.io/totalizador-gastos-mensais/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_BR">
-    <meta property="og:site_name" content="Totalizador de Gastos Mensais">
-    <meta property="og:title" content="Totalizador de Gastos Mensais">
+    <meta property="og:site_name" content="Gastos Mensais">
+    <meta property="og:title" content="Gastos Mensais">
     <meta
       property="og:description"
       content="Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador."
@@ -22,13 +22,13 @@
     <meta property="og:url" content="https://luizhtm.github.io/totalizador-gastos-mensais/">
     <meta property="og:image" content="https://luizhtm.github.io/totalizador-gastos-mensais/assets/icon.svg">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Totalizador de Gastos Mensais">
+    <meta name="twitter:title" content="Gastos Mensais">
     <meta
       name="twitter:description"
       content="Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador."
     >
     <meta name="twitter:image" content="https://luizhtm.github.io/totalizador-gastos-mensais/assets/icon.svg">
-    <title>Totalizador de Gastos Mensais</title>
+    <title>Gastos Mensais</title>
     <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
     <link rel="manifest" href="site.webmanifest">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -43,29 +43,29 @@
     <header class="site-header">
       <div class="container site-header-inner">
         <img class="site-icon" src="assets/icon.svg" alt="" aria-hidden="true" width="48" height="48">
-        <strong>Totalizador de gastos</strong>
+        <strong>Gastos mensais</strong>
       </div>
     </header>
 
     <main class="container app-shell">
       <header class="app-header">
         <div>
-          <h1>Entenda seus gastos do mes</h1>
+          <h1>Entenda seus gastos do mês</h1>
           <p>
-            Registre gastos do mes, acompanhe o total e entenda rapidamente
+            Registre gastos do mês, acompanhe o total e entenda rapidamente
             para onde o dinheiro foi.
           </p>
         </div>
 
-        <div class="month-panel" aria-label="Mes de referencia">
-          <label for="monthInput">Mes de referencia</label>
+        <div class="month-panel" aria-label="Mês de referência">
+          <label for="monthInput">Mês de referência</label>
           <input id="monthInput" type="month">
         </div>
       </header>
 
-      <section class="summary-grid" aria-label="Resumo do mes">
+      <section class="summary-grid" aria-label="Resumo do mês">
         <article class="summary-card summary-card-total">
-          <span>Total do mes</span>
+          <span>Total do mês</span>
           <strong id="totalAmount">R$ 0,00</strong>
         </article>
 
@@ -82,9 +82,9 @@
 
       <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
 
-      <section class="action-panel" aria-label="Acoes do totalizador">
+      <section class="action-panel" aria-label="Ações do totalizador">
         <div>
-          <h2>Gastos do mes</h2>
+          <h2>Gastos do mês</h2>
           <p>Adicione novos itens quando precisar e mantenha os backups por arquivo.</p>
         </div>
 
@@ -120,7 +120,7 @@
       <section id="importReviewSection" class="import-review panel" hidden>
         <header class="panel-heading import-review-heading">
           <div>
-            <h2>Revisar importacao OFX</h2>
+            <h2>Revisar importação OFX</h2>
             <p id="importReviewHint">Confira os gastos antes de salvar.</p>
           </div>
           <div class="import-review-actions">
@@ -137,7 +137,7 @@
         <article class="panel category-panel">
           <header class="panel-heading">
             <h2>Resumo por categoria</h2>
-            <p id="categorySummaryHint">Nenhum gasto cadastrado neste mes.</p>
+            <p id="categorySummaryHint">Nenhum gasto cadastrado neste mês.</p>
           </header>
           <div id="categorySummary" class="category-summary"></div>
         </article>
@@ -146,10 +146,10 @@
           <header class="panel-heading list-heading">
             <div>
               <h2>Itens cadastrados</h2>
-              <p id="expenseListHint">Nenhum gasto cadastrado neste mes.</p>
+              <p id="expenseListHint">Nenhum gasto cadastrado neste mês.</p>
             </div>
             <button id="clearMonthButton" class="outline danger-button" type="button">
-              Limpar mes
+              Limpar mês
             </button>
           </header>
 
@@ -160,7 +160,7 @@
                   <th>Item</th>
                   <th>Categoria</th>
                   <th class="numeric">Valor</th>
-                  <th class="actions-cell">Acoes</th>
+                  <th class="actions-cell">Ações</th>
                 </tr>
               </thead>
               <tbody id="expenseTableBody"></tbody>
@@ -218,7 +218,7 @@
             </div>
 
             <label for="descriptionInput">
-              Descricao
+              Descrição
               <textarea
                 id="descriptionInput"
                 name="description"

@@ -4,30 +4,37 @@ const BACKUP_FILENAME = "gastos.gastos.json";
 
 const CATEGORIES = [
   "Moradia",
-  "Alimentacao",
+  "Alimentação",
   "Transporte",
-  "Saude",
-  "Educacao",
+  "Saúde",
+  "Educação",
   "Lazer",
   "Assinaturas",
   "Contas da casa",
   "Compras",
   "Cuidados pessoais",
-  "Familia",
+  "Família",
   "Pets",
   "Viagens",
   "Impostos e taxas",
   "Outros",
 ];
 
+const LEGACY_CATEGORY_NAMES = {
+  Alimentacao: "Alimentação",
+  Saude: "Saúde",
+  Educacao: "Educação",
+  Familia: "Família",
+};
+
 const OFX_CATEGORY_RULES = [
   { category: "Transporte", keywords: ["uber", "99", "taxi", "metro", "metrô", "onibus", "ônibus", "combustivel", "combustível", "posto"] },
-  { category: "Alimentacao", keywords: ["ifood", "mercado", "market", "supermercado", "mercearia", "padaria", "restaurante", "cafe", "café"] },
+  { category: "Alimentação", keywords: ["ifood", "mercado", "market", "supermercado", "mercearia", "padaria", "restaurante", "cafe", "café"] },
   { category: "Moradia", keywords: ["aluguel", "condominio", "condomínio"] },
-  { category: "Saude", keywords: ["farmacia", "farmácia", "drogaria", "medico", "médico", "hospital", "clinica", "clínica"] },
+  { category: "Saúde", keywords: ["farmacia", "farmácia", "drogaria", "medico", "médico", "hospital", "clinica", "clínica"] },
   { category: "Assinaturas", keywords: ["netflix", "spotify", "google", "apple", "assinatura", "prime", "disney", "hbo", "max"] },
   { category: "Contas da casa", keywords: ["energia", "luz", "agua", "água", "internet", "telefone", "celular", "gas", "gás"] },
-  { category: "Educacao", keywords: ["escola", "faculdade", "curso", "alura", "udemy", "educacao", "educação"] },
+  { category: "Educação", keywords: ["escola", "faculdade", "curso", "alura", "udemy", "educacao", "educação"] },
   { category: "Compras", keywords: ["amazon", "mercado livre", "shopee", "compra", "magazine", "magalu"] },
   { category: "Viagens", keywords: ["hotel", "airbnb", "booking", "passagem", "latam", "gol", "azul"] },
   { category: "Cuidados pessoais", keywords: ["barbearia", "salao", "salão", "cabelo", "academia"] },
@@ -249,11 +256,11 @@ function clearSelectedMonth() {
   const monthExpenses = getSelectedMonthExpenses();
 
   if (monthExpenses.length === 0) {
-    showFeedback("Nao ha gastos para limpar neste mes.");
+    showFeedback("Não há gastos para limpar neste mês.");
     return;
   }
 
-  const shouldClear = window.confirm("Remover todos os gastos deste mes?");
+  const shouldClear = window.confirm("Remover todos os gastos deste mês?");
 
   if (!shouldClear) {
     return;
@@ -263,7 +270,7 @@ function clearSelectedMonth() {
   saveState();
   resetForm();
   render();
-  showFeedback("Gastos do mes removidos.");
+  showFeedback("Gastos do mês removidos.");
 }
 
 function render() {
@@ -314,7 +321,7 @@ function renderExpenseTable(expenses) {
   if (!hasRows) {
     elements.expenseTableBody.innerHTML = `
       <tr>
-        <td class="empty-state" colspan="4">Adicione o primeiro gasto para este mes.</td>
+        <td class="empty-state" colspan="4">Adicione o primeiro gasto para este mês.</td>
       </tr>
     `;
     return;
@@ -413,10 +420,10 @@ async function handleOfxImportFile(event) {
 
     state.importDrafts = drafts;
     renderImportReview(transactions.length);
-    showFeedback("Revise os gastos extraidos antes de importar.");
+    showFeedback("Revise os gastos extraídos antes de importar.");
   } catch (error) {
     clearImportReview();
-    showFeedback(error.message || "Nao foi possivel importar o arquivo OFX.");
+    showFeedback(error.message || "Não foi possível importar o arquivo OFX.");
   } finally {
     elements.ofxInput.value = "";
   }
@@ -433,7 +440,7 @@ function parseOfxTransactions(text) {
   const transactions = blocks.map(parseOfxTransactionBlock).filter(Boolean);
 
   if (transactions.length === 0) {
-    throw new Error("Nenhuma transacao OFX valida foi encontrada.");
+    throw new Error("Nenhuma transação OFX válida foi encontrada.");
   }
 
   return transactions;
@@ -717,7 +724,7 @@ function confirmOfxImport() {
     render();
     showFeedback(`${expensesToImport.length} gastos importados${skipped ? `; ${skipped} duplicados ignorados` : ""}.`);
   } catch (error) {
-    showFeedback(error.message || "Nao foi possivel concluir a importacao.");
+    showFeedback(error.message || "Não foi possível concluir a importação.");
   }
 }
 
@@ -762,7 +769,7 @@ async function importBackup(event) {
     render();
     showFeedback("Dados importados com sucesso.");
   } catch (error) {
-    showFeedback(error.message || "Nao foi possivel importar o arquivo.");
+    showFeedback(error.message || "Não foi possível importar o arquivo.");
   } finally {
     elements.importInput.value = "";
   }
@@ -770,15 +777,15 @@ async function importBackup(event) {
 
 function validateBackup(payload) {
   if (!payload || payload.app !== "totalizador-gastos-mensais") {
-    throw new Error("Arquivo invalido para este totalizador.");
+    throw new Error("Arquivo inválido para este totalizador.");
   }
 
   if (payload.version !== BACKUP_VERSION) {
-    throw new Error("Versao do arquivo nao suportada.");
+    throw new Error("Versão do arquivo não suportada.");
   }
 
   if (!Array.isArray(payload.expenses)) {
-    throw new Error("Arquivo sem lista de gastos valida.");
+    throw new Error("Arquivo sem lista de gastos válida.");
   }
 
   return payload.expenses.map(normalizeImportedExpense);
@@ -786,12 +793,12 @@ function validateBackup(payload) {
 
 function normalizeImportedExpense(expense) {
   const value = Number(expense.value);
-  const category = CATEGORIES.includes(expense.category) ? expense.category : "Outros";
+  const category = normalizeCategoryName(expense.category);
   const month = isValidMonth(expense.month) ? expense.month : getCurrentMonth();
   const name = String(expense.name || "").trim();
 
   if (!name || !Number.isFinite(value) || value <= 0) {
-    throw new Error("O arquivo possui gastos com dados invalidos.");
+    throw new Error("O arquivo possui gastos com dados inválidos.");
   }
 
   return {
@@ -851,7 +858,7 @@ function normalizeStoredExpense(expense) {
   return {
     id: String(expense.id),
     name: String(expense.name),
-    category: CATEGORIES.includes(expense.category) ? expense.category : "Outros",
+    category: normalizeCategoryName(expense.category),
     value,
     description: String(expense.description || ""),
     month: isValidMonth(expense.month) ? expense.month : getCurrentMonth(),
@@ -861,6 +868,16 @@ function normalizeStoredExpense(expense) {
     sourceKey: expense.sourceKey || undefined,
     sourceData: expense.sourceData || undefined,
   };
+}
+
+function normalizeCategoryName(category) {
+  const value = String(category || "");
+
+  if (CATEGORIES.includes(value)) {
+    return value;
+  }
+
+  return LEGACY_CATEGORY_NAMES[value] || "Outros";
 }
 
 function saveState() {

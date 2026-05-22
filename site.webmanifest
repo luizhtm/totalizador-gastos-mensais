@@ -1,5 +1,5 @@
 {
-  "name": "Totalizador de Gastos Mensais",
+  "name": "Gastos Mensais",
   "short_name": "Gastos",
   "description": "Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador.",
   "start_url": "./",

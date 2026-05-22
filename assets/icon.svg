@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">Totalizador de Gastos Mensais</title>
-  <desc id="desc">Icone minimalista de uma caixa com simbolo de dinheiro.</desc>
+  <title id="title">Gastos Mensais</title>
+  <desc id="desc">Ícone minimalista de uma caixa com símbolo de dinheiro.</desc>
   <rect width="512" height="512" rx="112" fill="#2563eb"/>
   <path fill="#ffffff" d="M124 178c0-24 20-44 44-44h176c24 0 44 20 44 44v168c0 24-20 44-44 44H168c-24 0-44-20-44-44V178Z"/>
   <rect x="153" y="164" width="206" height="52" rx="18" fill="#dbeafe"/>
