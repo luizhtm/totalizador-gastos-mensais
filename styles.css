@@ -131,6 +131,64 @@ button,
   font-weight: 700;
 }
 
+.privacy-strip {
+  align-items: center;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.privacy-mark {
+  align-items: center;
+  background: var(--app-success);
+  border-radius: 999px;
+  color: #ffffff;
+  display: inline-flex;
+  font-weight: 700;
+  height: 2.25rem;
+  justify-content: center;
+  width: 2.25rem;
+}
+
+.privacy-strip h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.privacy-strip p {
+  color: #3f5f4d;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.privacy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.privacy-tags li {
+  background: #ffffff;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  color: #166534;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.45rem 0.6rem;
+  white-space: nowrap;
+}
+
 .summary-grid {
   display: grid;
   gap: 0.85rem;
@@ -642,6 +700,7 @@ dialog.expense-dialog article > .modal-heading {
   .app-header,
   .summary-grid,
   .action-panel,
+  .privacy-strip,
   .content-grid {
     grid-template-columns: 1fr;
   }
@@ -651,6 +710,10 @@ dialog.expense-dialog article > .modal-heading {
   }
 
   .action-panel-controls {
+    justify-content: flex-start;
+  }
+
+  .privacy-tags {
     justify-content: flex-start;
   }
 

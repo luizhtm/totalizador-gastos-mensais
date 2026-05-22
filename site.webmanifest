@@ -1,7 +1,7 @@
 {
   "name": "Gastos Mensais",
   "short_name": "Gastos",
-  "description": "Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador.",
+  "description": "Importe seu extrato OFX, revise gastos por categoria e acompanhe tudo no navegador, sem login e sem enviar dados para servidores.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

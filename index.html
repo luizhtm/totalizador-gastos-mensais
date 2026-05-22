@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador."
+      content="Importe seu extrato OFX, revise gastos por categoria e acompanhe tudo no navegador, sem login e sem enviar dados para servidores."
     >
     <meta name="theme-color" content="#2563eb">
     <meta name="color-scheme" content="light">
@@ -17,7 +17,7 @@
     <meta property="og:title" content="Gastos Mensais">
     <meta
       property="og:description"
-      content="Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador."
+      content="Importe seu extrato OFX, revise gastos por categoria e acompanhe tudo no navegador, sem login e sem enviar dados para servidores."
     >
     <meta property="og:url" content="https://luizhtm.github.io/totalizador-gastos-mensais/">
     <meta property="og:image" content="https://luizhtm.github.io/totalizador-gastos-mensais/assets/icon.svg">
@@ -25,7 +25,7 @@
     <meta name="twitter:title" content="Gastos Mensais">
     <meta
       name="twitter:description"
-      content="Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador."
+      content="Importe seu extrato OFX, revise gastos por categoria e acompanhe tudo no navegador, sem login e sem enviar dados para servidores."
     >
     <meta name="twitter:image" content="https://luizhtm.github.io/totalizador-gastos-mensais/assets/icon.svg">
     <title>Gastos Mensais</title>
@@ -50,10 +50,10 @@
     <main class="container app-shell">
       <header class="app-header">
         <div>
-          <h1>Entenda seus gastos do mês</h1>
+          <h1>Entenda seus gastos pelo extrato OFX</h1>
           <p>
-            Registre gastos do mês, acompanhe o total e entenda rapidamente
-            para onde o dinheiro foi.
+            Importe o extrato do seu banco, revise os lançamentos e veja o total
+            do mês por categoria. Tudo direto no navegador, sem login.
           </p>
         </div>
 
@@ -62,6 +62,19 @@
           <input id="monthInput" type="month">
         </div>
       </header>
+
+      <section class="privacy-strip" aria-label="Privacidade">
+        <div class="privacy-mark" aria-hidden="true">$</div>
+        <div>
+          <h2>Privado por padrão</h2>
+          <p>Seus gastos ficam salvos apenas neste navegador. O app não envia dados para servidores nem exige cadastro para funcionar.</p>
+        </div>
+        <ul class="privacy-tags" aria-label="Destaques de privacidade">
+          <li>Importação OFX</li>
+          <li>Sem login</li>
+          <li>Dados locais</li>
+        </ul>
+      </section>
 
       <section class="summary-grid" aria-label="Resumo do mês">
         <article class="summary-card summary-card-total">
@@ -84,8 +97,8 @@
 
       <section class="action-panel" aria-label="Ações do totalizador">
         <div>
-          <h2>Gastos do mês</h2>
-          <p>Adicione novos itens quando precisar e mantenha os backups por arquivo.</p>
+          <h2>Importe ou ajuste seus gastos</h2>
+          <p>Use um arquivo OFX do banco para começar rápido, ou adicione itens manualmente quando precisar.</p>
         </div>
 
         <div class="action-panel-controls">
