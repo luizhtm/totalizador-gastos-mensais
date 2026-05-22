@@ -59,8 +59,35 @@ button,
   font-weight: 700;
 }
 
+.site-header {
+  background: var(--app-surface);
+  border-bottom: 1px solid var(--app-border);
+}
+
+.site-header-inner {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  min-height: 5rem;
+}
+
+.site-header-inner strong {
+  color: var(--app-text);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.site-icon {
+  border-radius: 0.7rem;
+  box-shadow: 0 0.75rem 1.5rem rgba(37, 99, 235, 0.16);
+  display: block;
+  height: 48px;
+  width: 48px;
+}
+
 .app-shell {
-  padding-block: clamp(1rem, 3vw, 2.5rem);
+  padding-block: clamp(2rem, 4vw, 3rem);
 }
 
 .app-header {
@@ -69,21 +96,6 @@ button,
   gap: 1rem;
   grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
   margin-bottom: 1.25rem;
-}
-
-.brand-heading {
-  align-items: start;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 64px minmax(0, 1fr);
-}
-
-.brand-icon {
-  border-radius: 16px;
-  box-shadow: 0 0.9rem 1.8rem rgba(37, 99, 235, 0.18);
-  display: block;
-  height: 64px;
-  width: 64px;
 }
 
 .app-header h1 {
@@ -664,15 +676,18 @@ dialog.expense-dialog article > .modal-heading {
 }
 
 @media (max-width: 640px) {
-  .brand-heading {
-    gap: 0.8rem;
-    grid-template-columns: 48px minmax(0, 1fr);
+  .site-header-inner {
+    min-height: 4.5rem;
   }
 
-  .brand-icon {
-    border-radius: 12px;
-    height: 48px;
-    width: 48px;
+  .site-header-inner strong {
+    font-size: 1.05rem;
+  }
+
+  .site-icon {
+    border-radius: 0.65rem;
+    height: 44px;
+    width: 44px;
   }
 
   .form-row,
