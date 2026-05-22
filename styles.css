@@ -532,6 +532,10 @@ dialog.expense-dialog article {
   padding: 1.5rem 1.75rem 1.25rem;
 }
 
+dialog.expense-dialog article > .modal-heading {
+  margin: 0 !important;
+}
+
 .modal-heading h2 {
   font-size: 1.15rem;
   font-weight: 700;
