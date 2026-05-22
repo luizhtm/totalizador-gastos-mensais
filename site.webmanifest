@@ -1,0 +1,18 @@
+{
+  "name": "Totalizador de Gastos Mensais",
+  "short_name": "Gastos",
+  "description": "Organize gastos mensais, acompanhe totais por categoria e importe despesas por arquivo OFX direto no navegador.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fb",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
