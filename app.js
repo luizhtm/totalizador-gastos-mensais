@@ -581,8 +581,8 @@ function renderImportReview(transactionCount) {
 
   elements.importReviewSection.hidden = false;
   elements.importReviewHint.textContent = [
-    `${state.importDrafts.length} gastos encontrados em ${transactionCount} transacoes OFX.`,
-    duplicateCount > 0 ? `${duplicateCount} possiveis duplicados foram desmarcados.` : "",
+    `${state.importDrafts.length} gastos encontrados em ${transactionCount} transações OFX.`,
+    duplicateCount > 0 ? `${duplicateCount} possíveis duplicados foram desmarcados.` : "",
   ].filter(Boolean).join(" ");
   elements.importReviewBody.innerHTML = state.importDrafts.map(renderImportDraft).join("");
   elements.importReviewSection.scrollIntoView({ behavior: "smooth", block: "start" });

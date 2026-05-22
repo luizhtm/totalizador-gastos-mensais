@@ -278,6 +278,7 @@ button,
 
 .import-review {
   margin-bottom: 1rem;
+  padding-top: 0;
 }
 
 .import-review[hidden] {
@@ -286,12 +287,28 @@ button,
 
 .import-review-heading {
   align-items: start;
-  display: flex;
+  background: var(--app-surface);
+  border-bottom: 1px solid var(--app-border);
+  border-radius: 0.5rem 0.5rem 0 0;
+  display: grid;
   gap: 1rem;
-  justify-content: space-between;
+  grid-template-columns: 1fr;
+  margin: 0 calc(clamp(1rem, 2vw, 1.25rem) * -1) 1rem;
+  padding: clamp(1rem, 2vw, 1.25rem);
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
 .import-review-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.import-review-primary-action {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -650,15 +667,25 @@ dialog.expense-dialog article > .modal-heading {
     justify-content: flex-start;
   }
 
-  .import-review-heading,
+  .import-review-heading {
+    display: grid;
+  }
+
   .import-review-actions {
-    display: block;
+    align-items: stretch;
+    display: flex;
+    justify-content: stretch;
+  }
+
+  .import-review-primary-action {
+    flex: 1 1 18rem;
+    justify-content: flex-start;
   }
 
   .import-review-actions button,
   .import-review-actions strong {
-    margin-top: 0.65rem;
-    width: 100%;
+    margin-top: 0;
+    width: auto;
   }
 
   .import-draft,
