@@ -198,7 +198,7 @@ button,
   grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.4fr);
 }
 
-@media (min-width: 901px) {
+@media (min-width: 1181px) {
   .category-panel {
     align-self: start;
     position: sticky;
@@ -252,29 +252,6 @@ button,
   gap: 0.75rem;
   grid-column: 1 / -1;
   padding-top: 0.85rem;
-}
-
-@media (max-width: 1180px) {
-  .action-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .action-panel-controls {
-    justify-content: flex-start;
-  }
-
-  .import-review-actions {
-    justify-content: flex-start;
-  }
-
-  .import-review-primary-action {
-    flex: 1 1 100%;
-    justify-content: flex-start;
-  }
-
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .panel {
@@ -674,7 +651,7 @@ dialog.expense-dialog article > .modal-heading {
   width: auto;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
   .app-header,
   .summary-grid,
   .action-panel,
