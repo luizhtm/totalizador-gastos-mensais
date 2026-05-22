@@ -4,6 +4,8 @@
 
 Defines how users add, edit, and remove monthly expense items.
 
+## Requirements
+
 ### Requirement: Add Expense
 
 The application SHALL allow the user to add an expense for the selected month.

@@ -4,6 +4,8 @@
 
 Defines how users import OFX statements into monthly expenses.
 
+## Requirements
+
 ### Requirement: Select OFX File
 
 The application SHALL allow the user to select an OFX statement file for import.

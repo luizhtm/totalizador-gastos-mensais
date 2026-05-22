@@ -4,6 +4,8 @@
 
 Defines how users export and import local expense data.
 
+## Requirements
+
 ### Requirement: Export Backup
 
 The application SHALL allow the user to export all saved expense data as a JSON backup file.

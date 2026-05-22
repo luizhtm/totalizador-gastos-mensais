@@ -4,6 +4,8 @@
 
 Defines how the application summarizes the selected month.
 
+## Requirements
+
 ### Requirement: Month Selection
 
 The application SHALL display data for the currently selected month.

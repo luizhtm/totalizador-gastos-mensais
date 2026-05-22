@@ -4,6 +4,8 @@
 
 Defines how the project is published as a static GitHub Pages site.
 
+## Requirements
+
 ### Requirement: Static Site
 
 The project SHALL be deployable as static files without a build step.

@@ -4,6 +4,8 @@
 
 Defines how category totals are calculated and displayed.
 
+## Requirements
+
 ### Requirement: Group By Category
 
 The application SHALL group selected-month expenses by category.
