@@ -112,15 +112,6 @@ button,
   max-width: 44rem;
 }
 
-.eyebrow {
-  color: #41516a;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0;
-  margin-bottom: 0.55rem;
-  text-transform: uppercase;
-}
-
 .month-panel,
 .panel,
 .summary-card {
@@ -192,9 +183,6 @@ button,
 .content-grid {
   display: grid;
   gap: 1rem;
-}
-
-.content-grid {
   grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.4fr);
 }
 
@@ -269,8 +257,7 @@ button,
   margin-bottom: 0.2rem;
 }
 
-.panel-heading p,
-.help-text {
+.panel-heading p {
   color: var(--app-text-muted);
   font-size: 0.9rem;
   margin: 0;
@@ -665,10 +652,6 @@ dialog.expense-dialog article > .modal-heading {
 
   .action-panel-controls {
     justify-content: flex-start;
-  }
-
-  .import-review-heading {
-    display: grid;
   }
 
   .import-review-actions {
