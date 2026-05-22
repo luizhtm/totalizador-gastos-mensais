@@ -71,6 +71,21 @@ button,
   margin-bottom: 1.25rem;
 }
 
+.brand-heading {
+  align-items: start;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.brand-icon {
+  border-radius: 16px;
+  box-shadow: 0 0.9rem 1.8rem rgba(37, 99, 235, 0.18);
+  display: block;
+  height: 64px;
+  width: 64px;
+}
+
 .app-header h1 {
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 700;
@@ -649,6 +664,17 @@ dialog.expense-dialog article > .modal-heading {
 }
 
 @media (max-width: 640px) {
+  .brand-heading {
+    gap: 0.8rem;
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .brand-icon {
+    border-radius: 12px;
+    height: 48px;
+    width: 48px;
+  }
+
   .form-row,
   .list-heading {
     display: block;
