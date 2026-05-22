@@ -32,6 +32,12 @@
   --pico-form-element-placeholder-color: #8a94a6;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   background: var(--app-bg);
   color: var(--app-text);
@@ -494,24 +500,26 @@ tbody tr:last-child td {
   text-align: center;
 }
 
-.expense-dialog {
+dialog.expense-dialog {
   border: 0;
-  border-radius: 0.6rem;
-  box-shadow: 0 1.5rem 4rem rgba(15, 23, 42, 0.24);
-  max-width: min(42rem, calc(100vw - 2rem));
-  padding: 0;
-  width: 42rem;
+  padding: 2rem 1rem !important;
 }
 
-.expense-dialog::backdrop {
+dialog.expense-dialog::backdrop {
   background: rgba(15, 23, 42, 0.45);
 }
 
-.expense-dialog article {
+dialog.expense-dialog article {
   border: 0;
-  box-shadow: none;
+  border-radius: 0.6rem;
+  box-shadow: 0 1.5rem 4rem rgba(15, 23, 42, 0.24);
   margin: 0;
+  max-height: calc(100dvh - 4rem);
+  max-inline-size: none;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: 0;
+  width: min(42rem, 100%) !important;
 }
 
 .modal-heading {
@@ -537,12 +545,31 @@ tbody tr:last-child td {
 }
 
 .close-button {
+  align-items: center;
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--app-text-muted);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 1.05rem;
+  height: 2rem;
+  justify-content: center;
   margin: 0;
-  padding: 0.35rem 0.6rem;
+  padding: 0;
+  width: 2rem;
+}
+
+.close-button:hover {
+  background: #e8edf5;
+  border-color: #d1d8e5;
+  color: var(--app-text);
 }
 
 .modal-form {
   padding: 1.25rem;
+  overflow-x: hidden;
 }
 
 .modal-form textarea {
@@ -551,9 +578,18 @@ tbody tr:last-child td {
 
 .modal-form footer {
   border-top: 1px solid #edf0f5;
+  display: flex;
+  gap: 0.75rem;
   justify-content: flex-end;
   margin-top: 0.5rem;
   padding-top: 1rem;
+}
+
+.modal-form .form-actions button {
+  flex: 0 0 auto;
+  margin: 0;
+  min-width: 8rem;
+  width: auto;
 }
 
 @media (max-width: 900px) {
@@ -624,22 +660,27 @@ tbody tr:last-child td {
     flex-direction: column;
   }
 
-  .expense-dialog {
-    max-width: calc(100vw - 1rem);
-    width: calc(100vw - 1rem);
+  dialog.expense-dialog {
+    padding: 1rem 0.5rem !important;
   }
 
-  .modal-heading {
-    display: block;
+  dialog.expense-dialog article {
+    max-height: calc(100dvh - 2rem);
+    width: 100% !important;
   }
 
   .close-button {
-    margin-top: 0.75rem;
-    width: 100%;
+    margin-left: auto;
   }
 
   .modal-form footer {
-    display: block;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+  }
+
+  .modal-form .form-actions button {
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .actions-cell {
