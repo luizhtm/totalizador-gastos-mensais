@@ -87,7 +87,7 @@ init();
 function init() {
   populateCategories();
   loadState();
-  elements.monthInput.value = state.selectedMonth;
+  renderMonthOptions();
   bindEvents();
   render();
 }
@@ -274,6 +274,7 @@ function clearSelectedMonth() {
 }
 
 function render() {
+  renderMonthOptions();
   const monthExpenses = getSelectedMonthExpenses();
   const total = sumExpenses(monthExpenses);
   const categoryTotals = getCategoryTotals(monthExpenses);
@@ -286,6 +287,33 @@ function render() {
 
   renderCategorySummary(categoryTotals, total);
   renderExpenseTable(monthExpenses);
+}
+
+function renderMonthOptions() {
+  const months = getAvailableMonths();
+
+  if (!months.includes(state.selectedMonth)) {
+    state.selectedMonth = months[0] || getCurrentMonth();
+  }
+
+  elements.monthInput.innerHTML = months.map((month) => `
+    <option value="${escapeAttribute(month)}" ${month === state.selectedMonth ? "selected" : ""}>
+      ${formatMonthLabel(month)}
+    </option>
+  `).join("");
+  elements.monthInput.value = state.selectedMonth;
+}
+
+function getAvailableMonths() {
+  const months = new Set([getCurrentMonth()]);
+
+  for (const expense of state.expenses) {
+    if (isValidMonth(expense.month)) {
+      months.add(expense.month);
+    }
+  }
+
+  return [...months].sort((a, b) => b.localeCompare(a));
 }
 
 function renderCategorySummary(categoryTotals, total) {
@@ -905,6 +933,22 @@ function getCurrentMonth() {
 
 function isValidMonth(value) {
   return typeof value === "string" && /^\d{4}-\d{2}$/.test(value);
+}
+
+function formatMonthLabel(value) {
+  if (!isValidMonth(value)) {
+    return value;
+  }
+
+  const [year, month] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, 1));
+  const label = new Intl.DateTimeFormat("pt-BR", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+
+  return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
 function formatCurrency(value) {

@@ -131,6 +131,10 @@ button,
   font-weight: 700;
 }
 
+.month-panel select {
+  margin-bottom: 0;
+}
+
 .privacy-strip {
   align-items: center;
   background: #f0fdf4;
