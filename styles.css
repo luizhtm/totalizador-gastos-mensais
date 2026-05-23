@@ -659,6 +659,7 @@ tbody tr:last-child td {
 
 .icon-action {
   align-items: center;
+  border: 1px solid transparent;
   box-shadow: none;
   border-radius: 0.5rem;
   display: inline-flex;
@@ -666,10 +667,12 @@ tbody tr:last-child td {
   justify-content: center;
   margin: 0;
   min-height: 2.45rem;
-  padding: 0.45rem 0.6rem;
+  padding: 0.45rem;
+  width: 2.45rem;
 }
 
 .icon-action svg {
+  flex: 0 0 auto;
   fill: none;
   height: 1.05rem;
   stroke: currentColor;
@@ -679,25 +682,45 @@ tbody tr:last-child td {
   width: 1.05rem;
 }
 
-.icon-action-edit {
-  background: var(--app-muted) !important;
-  border-color: var(--app-muted) !important;
-  color: #ffffff;
+.icon-action span {
+  display: none;
 }
 
-.icon-action-edit:hover {
+.icon-action-edit {
+  --pico-background-color: var(--app-muted);
+  --pico-border-color: var(--app-muted);
+  --pico-color: #ffffff;
+  background: var(--app-muted) !important;
+  border-color: var(--app-muted) !important;
+  color: #ffffff !important;
+}
+
+.icon-action-edit:hover,
+.icon-action-edit:focus,
+.icon-action-edit:active {
+  --pico-background-color: #46556f;
+  --pico-border-color: #46556f;
+  --pico-color: #ffffff;
   background: #46556f !important;
   border-color: #46556f !important;
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 .icon-action-remove {
+  --pico-background-color: #ffffff;
+  --pico-border-color: #f08a84;
+  --pico-color: var(--app-danger);
   background: #ffffff !important;
   border-color: #f08a84 !important;
   color: var(--app-danger) !important;
 }
 
-.icon-action-remove:hover {
+.icon-action-remove:hover,
+.icon-action-remove:focus,
+.icon-action-remove:active {
+  --pico-background-color: #fff5f4;
+  --pico-border-color: var(--app-danger);
+  --pico-color: var(--app-danger);
   background: #fff5f4 !important;
   border-color: var(--app-danger) !important;
   color: var(--app-danger) !important;
@@ -938,7 +961,12 @@ dialog.expense-dialog article > .modal-heading {
   }
 
   .icon-action {
+    padding: 0.45rem 0.6rem;
     width: 100%;
+  }
+
+  .icon-action span {
+    display: inline;
   }
 }
 
