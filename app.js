@@ -13,21 +13,25 @@ import {
   isValidMonth,
   maskMoneyInputValue,
   mergeExpenses,
+  normalizeThemeMode,
   normalizeStoredExpense,
   parseMoneyInput,
   parseOfxTransactions,
+  resolveThemeMode,
   sortExpenses,
   sumExpenses,
   validateBackup,
 } from "./app-core.js";
 
 const STORAGE_KEY = "totalizador-gastos:v1";
+const THEME_STORAGE_KEY = "totalizador-gastos:theme-mode";
 const BACKUP_FILENAME = "gastos.gastos.json";
 
 const state = {
   expenses: [],
   selectedMonth: getCurrentMonth(),
   importDrafts: [],
+  themeMode: "auto",
   expenseSort: {
     field: "name",
     direction: "asc",
@@ -71,11 +75,14 @@ const elements = {
   confirmOfxImportButton: document.querySelector("#confirmOfxImportButton"),
   cancelOfxImportButton: document.querySelector("#cancelOfxImportButton"),
   clearMonthButton: document.querySelector("#clearMonthButton"),
+  themeModeButtons: document.querySelectorAll("[data-theme-mode]"),
 };
 
 init();
 
 function init() {
+  loadThemeMode();
+  applyThemeMode();
   populateCategories();
   loadState();
   renderMonthOptions();
@@ -110,6 +117,11 @@ function bindEvents() {
   elements.confirmOfxImportButton.addEventListener("click", confirmOfxImport);
   elements.cancelOfxImportButton.addEventListener("click", clearImportReview);
   elements.clearMonthButton.addEventListener("click", clearSelectedMonth);
+  for (const button of elements.themeModeButtons) {
+    button.addEventListener("click", () => {
+      setThemeMode(button.dataset.themeMode);
+    });
+  }
   elements.expenseSortField.addEventListener("change", () => {
     setExpenseSort(elements.expenseSortField.value);
   });
@@ -144,6 +156,31 @@ function bindEvents() {
       removeExpense(id);
     }
   });
+}
+
+function setThemeMode(mode) {
+  state.themeMode = normalizeThemeMode(mode);
+  localStorage.setItem(THEME_STORAGE_KEY, state.themeMode);
+  applyThemeMode();
+}
+
+function loadThemeMode() {
+  state.themeMode = normalizeThemeMode(localStorage.getItem(THEME_STORAGE_KEY));
+}
+
+function applyThemeMode() {
+  const systemPrefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches || false;
+  const activeTheme = resolveThemeMode(state.themeMode, systemPrefersDark);
+  const themeColor = activeTheme === "dark" ? "#0f172a" : "#2563eb";
+
+  document.documentElement.dataset.theme = activeTheme;
+  document.documentElement.dataset.themeMode = state.themeMode;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor);
+
+  for (const button of elements.themeModeButtons) {
+    const isActive = button.dataset.themeMode === state.themeMode;
+    button.setAttribute("aria-pressed", String(isActive));
+  }
 }
 
 function setExpenseSort(field) {

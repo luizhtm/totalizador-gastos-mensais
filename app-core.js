@@ -1,5 +1,7 @@
 export const BACKUP_VERSION = 1;
 
+export const THEME_MODES = ["auto", "light", "dark"];
+
 export const CATEGORIES = [
   "Moradia",
   "Alimentação",
@@ -61,6 +63,20 @@ export function getTopCategory(categoryTotals) {
 
 export function sumExpenses(expenses) {
   return expenses.reduce((total, expense) => total + expense.value, 0);
+}
+
+export function normalizeThemeMode(mode) {
+  return THEME_MODES.includes(mode) ? mode : "auto";
+}
+
+export function resolveThemeMode(mode, systemPrefersDark) {
+  const normalizedMode = normalizeThemeMode(mode);
+
+  if (normalizedMode === "auto") {
+    return systemPrefersDark ? "dark" : "light";
+  }
+
+  return normalizedMode;
 }
 
 export function sortExpenses(expenses, sort = { field: "name", direction: "asc" }) {

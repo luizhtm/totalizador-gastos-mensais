@@ -10,8 +10,10 @@ import {
   mergeExpenses,
   normalizeCategoryName,
   normalizeStoredExpense,
+  normalizeThemeMode,
   parseMoneyInput,
   parseOfxTransactions,
+  resolveThemeMode,
   sortExpenses,
   sumExpenses,
   suggestCategory,
@@ -25,6 +27,17 @@ test("formats and parses money values in pt-BR format", () => {
   assert.equal(formatMoneyInput(1234.5), "1.234,50");
   assert.equal(parseMoneyInput("1.234,56"), 1234.56);
   assert.ok(Number.isNaN(parseMoneyInput("abc")));
+});
+
+test("normalizes and resolves theme modes", () => {
+  assert.equal(normalizeThemeMode("auto"), "auto");
+  assert.equal(normalizeThemeMode("light"), "light");
+  assert.equal(normalizeThemeMode("dark"), "dark");
+  assert.equal(normalizeThemeMode("unknown"), "auto");
+  assert.equal(resolveThemeMode("auto", true), "dark");
+  assert.equal(resolveThemeMode("auto", false), "light");
+  assert.equal(resolveThemeMode("light", true), "light");
+  assert.equal(resolveThemeMode("dark", false), "dark");
 });
 
 test("summarizes expenses by category and finds the top category", () => {
