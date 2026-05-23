@@ -1,45 +1,27 @@
+import {
+  BACKUP_VERSION,
+  CATEGORIES,
+  createOfxDrafts,
+  formatCurrency,
+  formatMoneyInput,
+  formatMonthLabel,
+  formatPercent,
+  getCategoryTotals,
+  getCurrentMonth,
+  getExistingImportKeys,
+  getTopCategory,
+  isValidMonth,
+  maskMoneyInputValue,
+  mergeExpenses,
+  normalizeStoredExpense,
+  parseMoneyInput,
+  parseOfxTransactions,
+  sumExpenses,
+  validateBackup,
+} from "./app-core.js";
+
 const STORAGE_KEY = "totalizador-gastos:v1";
-const BACKUP_VERSION = 1;
 const BACKUP_FILENAME = "gastos.gastos.json";
-
-const CATEGORIES = [
-  "Moradia",
-  "Alimentação",
-  "Transporte",
-  "Saúde",
-  "Educação",
-  "Lazer",
-  "Assinaturas",
-  "Contas da casa",
-  "Compras",
-  "Cuidados pessoais",
-  "Família",
-  "Pets",
-  "Viagens",
-  "Impostos e taxas",
-  "Outros",
-];
-
-const LEGACY_CATEGORY_NAMES = {
-  Alimentacao: "Alimentação",
-  Saude: "Saúde",
-  Educacao: "Educação",
-  Familia: "Família",
-};
-
-const OFX_CATEGORY_RULES = [
-  { category: "Transporte", keywords: ["uber", "99", "taxi", "metro", "metrô", "onibus", "ônibus", "combustivel", "combustível", "posto"] },
-  { category: "Alimentação", keywords: ["ifood", "mercado", "market", "supermercado", "mercearia", "padaria", "restaurante", "cafe", "café"] },
-  { category: "Moradia", keywords: ["aluguel", "condominio", "condomínio"] },
-  { category: "Saúde", keywords: ["farmacia", "farmácia", "drogaria", "medico", "médico", "hospital", "clinica", "clínica"] },
-  { category: "Assinaturas", keywords: ["netflix", "spotify", "google", "apple", "assinatura", "prime", "disney", "hbo", "max"] },
-  { category: "Contas da casa", keywords: ["energia", "luz", "agua", "água", "internet", "telefone", "celular", "gas", "gás"] },
-  { category: "Educação", keywords: ["escola", "faculdade", "curso", "alura", "udemy", "educacao", "educação"] },
-  { category: "Compras", keywords: ["amazon", "mercado livre", "shopee", "compra", "magazine", "magalu"] },
-  { category: "Viagens", keywords: ["hotel", "airbnb", "booking", "passagem", "latam", "gol", "azul"] },
-  { category: "Cuidados pessoais", keywords: ["barbearia", "salao", "salão", "cabelo", "academia"] },
-  { category: "Pets", keywords: ["pet", "veterinario", "veterinário", "racao", "ração"] },
-];
 
 const state = {
   expenses: [],
@@ -224,14 +206,7 @@ function resetForm() {
 }
 
 function maskValueInput() {
-  const digits = elements.valueInput.value.replace(/\D/g, "");
-
-  if (!digits) {
-    elements.valueInput.value = "";
-    return;
-  }
-
-  elements.valueInput.value = formatMoneyInput(Number(digits) / 100);
+  elements.valueInput.value = maskMoneyInputValue(elements.valueInput.value);
 }
 
 function normalizeValueInput() {
@@ -403,30 +378,6 @@ function getSelectedMonthExpenses() {
   return state.expenses.filter((expense) => expense.month === state.selectedMonth);
 }
 
-function getCategoryTotals(expenses) {
-  const totals = new Map();
-
-  for (const expense of expenses) {
-    totals.set(expense.category, (totals.get(expense.category) || 0) + expense.value);
-  }
-
-  return [...totals.entries()].map(([category, total]) => ({ category, total }));
-}
-
-function getTopCategory(categoryTotals) {
-  return categoryTotals.reduce((currentTop, item) => {
-    if (!currentTop || item.total > currentTop.total) {
-      return item;
-    }
-
-    return currentTop;
-  }, null);
-}
-
-function sumExpenses(expenses) {
-  return expenses.reduce((total, expense) => total + expense.value, 0);
-}
-
 function exportBackup() {
   const months = [...new Set(state.expenses.map((expense) => expense.month))].sort();
   const payload = {
@@ -460,7 +411,7 @@ async function handleOfxImportFile(event) {
   try {
     const text = await file.text();
     const transactions = parseOfxTransactions(text);
-    const drafts = createOfxDrafts(transactions);
+    const drafts = createOfxDrafts(transactions, state.expenses);
 
     if (drafts.length === 0) {
       clearImportReview();
@@ -477,152 +428,6 @@ async function handleOfxImportFile(event) {
   } finally {
     elements.ofxInput.value = "";
   }
-}
-
-function parseOfxTransactions(text) {
-  const content = String(text || "").trim();
-
-  if (!content || !/<STMTTRN\b/i.test(content)) {
-    throw new Error("Nenhuma transacao OFX foi encontrada.");
-  }
-
-  const blocks = content.match(/<STMTTRN\b[^>]*>[\s\S]*?(?=<\/STMTTRN>|<STMTTRN\b|<\/BANKTRANLIST>|<\/CCSTMTRS>|$)/gi) || [];
-  const transactions = blocks.map(parseOfxTransactionBlock).filter(Boolean);
-
-  if (transactions.length === 0) {
-    throw new Error("Nenhuma transação OFX válida foi encontrada.");
-  }
-
-  return transactions;
-}
-
-function parseOfxTransactionBlock(block) {
-  const date = normalizeOfxDate(readOfxTag(block, "DTPOSTED"));
-  const amount = parseOfxAmount(readOfxTag(block, "TRNAMT"));
-  const name = cleanOfxText(readOfxTag(block, "NAME"));
-  const memo = cleanOfxText(readOfxTag(block, "MEMO"));
-  const fitId = cleanOfxText(readOfxTag(block, "FITID"));
-  const type = cleanOfxText(readOfxTag(block, "TRNTYPE"));
-  const description = name || memo;
-
-  if (!date || !Number.isFinite(amount) || !description) {
-    return null;
-  }
-
-  return {
-    date,
-    month: date.slice(0, 7),
-    amount,
-    name,
-    memo,
-    fitId,
-    type,
-    description,
-  };
-}
-
-function readOfxTag(block, tagName) {
-  const tag = tagName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const xmlMatch = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, "i"));
-
-  if (xmlMatch) {
-    return xmlMatch[1];
-  }
-
-  const sgmlMatch = block.match(new RegExp(`<${tag}\\b[^>]*>\\s*([^<\\r\\n]+)`, "i"));
-  return sgmlMatch ? sgmlMatch[1] : "";
-}
-
-function normalizeOfxDate(value) {
-  const digits = String(value || "").match(/\d{8}/);
-
-  if (!digits) {
-    return "";
-  }
-
-  const raw = digits[0];
-  return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`;
-}
-
-function parseOfxAmount(value) {
-  const normalized = String(value || "").trim().replace(",", ".");
-  const amount = Number(normalized);
-
-  return Number.isFinite(amount) ? amount : NaN;
-}
-
-function cleanOfxText(value) {
-  const parser = document.createElement("textarea");
-  parser.innerHTML = String(value || "").trim();
-
-  return parser.value.replace(/\s+/g, " ").trim();
-}
-
-function createOfxDrafts(transactions) {
-  const existingKeys = getExistingImportKeys();
-
-  return transactions
-    .filter((transaction) => transaction.amount < 0)
-    .map((transaction) => {
-      const value = Math.abs(transaction.amount);
-      const sourceKey = createOfxSourceKey(transaction, value);
-      const sourceId = transaction.fitId || "";
-      const duplicate = Boolean(
-        (sourceId && existingKeys.sourceIds.has(sourceId)) ||
-        existingKeys.sourceKeys.has(sourceKey)
-      );
-
-      return {
-        draftId: crypto.randomUUID(),
-        selected: !duplicate,
-        duplicate,
-        date: transaction.date,
-        month: transaction.month,
-        name: transaction.name || transaction.memo || "Gasto importado",
-        description: transaction.memo && transaction.memo !== transaction.name ? transaction.memo : "",
-        category: suggestCategory(`${transaction.name} ${transaction.memo}`),
-        value,
-        source: "ofx",
-        sourceId,
-        sourceKey,
-        sourceData: transaction,
-      };
-    });
-}
-
-function getExistingImportKeys() {
-  const sourceIds = new Set();
-  const sourceKeys = new Set();
-
-  for (const expense of state.expenses) {
-    if (expense.source === "ofx" && expense.sourceId) {
-      sourceIds.add(expense.sourceId);
-    }
-
-    if (expense.source === "ofx" && expense.sourceKey) {
-      sourceKeys.add(expense.sourceKey);
-    }
-  }
-
-  return { sourceIds, sourceKeys };
-}
-
-function createOfxSourceKey(transaction, value) {
-  return [
-    "ofx",
-    transaction.date,
-    value.toFixed(2),
-    normalizeForMatching(transaction.description),
-  ].join(":");
-}
-
-function suggestCategory(text) {
-  const normalized = normalizeForMatching(text);
-  const match = OFX_CATEGORY_RULES.find((rule) => (
-    rule.keywords.some((keyword) => normalized.includes(normalizeForMatching(keyword)))
-  ));
-
-  return match ? match.category : "Outros";
 }
 
 function renderImportReview(transactionCount) {
@@ -727,7 +532,7 @@ function readSelectedImportDrafts({ allowInvalid } = { allowInvalid: false }) {
 function confirmOfxImport() {
   try {
     const selectedDrafts = readSelectedImportDrafts();
-    const existingKeys = getExistingImportKeys();
+    const existingKeys = getExistingImportKeys(state.expenses);
     const expensesToImport = [];
     let skipped = 0;
 
@@ -825,57 +630,6 @@ async function importBackup(event) {
   }
 }
 
-function validateBackup(payload) {
-  if (!payload || payload.app !== "totalizador-gastos-mensais") {
-    throw new Error("Arquivo inválido para este totalizador.");
-  }
-
-  if (payload.version !== BACKUP_VERSION) {
-    throw new Error("Versão do arquivo não suportada.");
-  }
-
-  if (!Array.isArray(payload.expenses)) {
-    throw new Error("Arquivo sem lista de gastos válida.");
-  }
-
-  return payload.expenses.map(normalizeImportedExpense);
-}
-
-function normalizeImportedExpense(expense) {
-  const value = Number(expense.value);
-  const category = normalizeCategoryName(expense.category);
-  const month = isValidMonth(expense.month) ? expense.month : getCurrentMonth();
-  const name = String(expense.name || "").trim();
-
-  if (!name || !Number.isFinite(value) || value <= 0) {
-    throw new Error("O arquivo possui gastos com dados inválidos.");
-  }
-
-  return {
-    id: expense.id || crypto.randomUUID(),
-    name,
-    category,
-    value,
-    description: String(expense.description || "").trim(),
-    month,
-    createdAt: expense.createdAt || new Date().toISOString(),
-    source: expense.source || undefined,
-    sourceId: expense.sourceId || undefined,
-    sourceKey: expense.sourceKey || undefined,
-    sourceData: expense.sourceData || undefined,
-  };
-}
-
-function mergeExpenses(currentExpenses, importedExpenses) {
-  const merged = new Map(currentExpenses.map((expense) => [expense.id, expense]));
-
-  for (const expense of importedExpenses) {
-    merged.set(expense.id, expense);
-  }
-
-  return [...merged.values()];
-}
-
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
 
@@ -898,38 +652,6 @@ function loadState() {
   }
 }
 
-function normalizeStoredExpense(expense) {
-  const value = Number(expense.value);
-
-  if (!expense.id || !expense.name || !Number.isFinite(value) || value <= 0) {
-    return null;
-  }
-
-  return {
-    id: String(expense.id),
-    name: String(expense.name),
-    category: normalizeCategoryName(expense.category),
-    value,
-    description: String(expense.description || ""),
-    month: isValidMonth(expense.month) ? expense.month : getCurrentMonth(),
-    createdAt: expense.createdAt || new Date().toISOString(),
-    source: expense.source || undefined,
-    sourceId: expense.sourceId || undefined,
-    sourceKey: expense.sourceKey || undefined,
-    sourceData: expense.sourceData || undefined,
-  };
-}
-
-function normalizeCategoryName(category) {
-  const value = String(category || "");
-
-  if (CATEGORIES.includes(value)) {
-    return value;
-  }
-
-  return LEGACY_CATEGORY_NAMES[value] || "Outros";
-}
-
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     selectedMonth: state.selectedMonth,
@@ -943,71 +665,6 @@ function showFeedback(message) {
   showFeedback.timeout = window.setTimeout(() => {
     elements.feedback.textContent = "";
   }, 3600);
-}
-
-function getCurrentMonth() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-
-  return `${year}-${month}`;
-}
-
-function isValidMonth(value) {
-  return typeof value === "string" && /^\d{4}-\d{2}$/.test(value);
-}
-
-function formatMonthLabel(value) {
-  if (!isValidMonth(value)) {
-    return value;
-  }
-
-  const [year, month] = value.split("-").map(Number);
-  const date = new Date(Date.UTC(year, month - 1, 1));
-  const label = new Intl.DateTimeFormat("pt-BR", {
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(date);
-
-  return label.charAt(0).toUpperCase() + label.slice(1);
-}
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
-}
-
-function formatMoneyInput(value) {
-  return new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
-
-function parseMoneyInput(value) {
-  const normalized = String(value || "")
-    .replace(/\./g, "")
-    .replace(",", ".")
-    .trim();
-  const parsed = Number(normalized);
-
-  return Number.isFinite(parsed) ? parsed : NaN;
-}
-
-function formatPercent(value) {
-  return `${Math.round(value)}%`;
-}
-
-function normalizeForMatching(value) {
-  return String(value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 function escapeHtml(value) {
