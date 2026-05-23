@@ -12,6 +12,7 @@ import {
   normalizeStoredExpense,
   parseMoneyInput,
   parseOfxTransactions,
+  sortExpenses,
   sumExpenses,
   suggestCategory,
   validateBackup,
@@ -40,6 +41,34 @@ test("summarizes expenses by category and finds the top category", () => {
     { category: "Transporte", total: 12 },
   ]);
   assert.deepEqual(getTopCategory(totals), { category: "Alimentação", total: 40 });
+});
+
+test("sorts expenses by item, category, and value", () => {
+  const expenses = [
+    { name: "Uber", category: "Transporte", value: 25 },
+    { name: "Aluguel", category: "Moradia", value: 1200 },
+    { name: "iFood", category: "Alimentação", value: 60 },
+    { name: "Internet", category: "Contas da casa", value: 100 },
+  ];
+
+  assert.deepEqual(sortExpenses(expenses).map((expense) => expense.name), [
+    "Aluguel",
+    "iFood",
+    "Internet",
+    "Uber",
+  ]);
+  assert.deepEqual(sortExpenses(expenses, { field: "category", direction: "asc" }).map((expense) => expense.name), [
+    "iFood",
+    "Internet",
+    "Aluguel",
+    "Uber",
+  ]);
+  assert.deepEqual(sortExpenses(expenses, { field: "value", direction: "desc" }).map((expense) => expense.name), [
+    "Aluguel",
+    "Internet",
+    "iFood",
+    "Uber",
+  ]);
 });
 
 test("normalizes legacy and unknown categories", () => {

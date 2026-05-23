@@ -63,6 +63,32 @@ export function sumExpenses(expenses) {
   return expenses.reduce((total, expense) => total + expense.value, 0);
 }
 
+export function sortExpenses(expenses, sort = { field: "name", direction: "asc" }) {
+  const field = ["name", "category", "value"].includes(sort.field) ? sort.field : "name";
+  const direction = sort.direction === "desc" ? "desc" : "asc";
+  const directionFactor = direction === "desc" ? -1 : 1;
+
+  return [...expenses].sort((a, b) => {
+    const primaryComparison = compareExpenseField(a, b, field);
+
+    if (primaryComparison !== 0) {
+      return primaryComparison * directionFactor;
+    }
+
+    return compareExpenseField(a, b, "name");
+  });
+}
+
+function compareExpenseField(a, b, field) {
+  if (field === "value") {
+    return a.value - b.value;
+  }
+
+  return String(a[field] || "").localeCompare(String(b[field] || ""), "pt-BR", {
+    sensitivity: "base",
+  });
+}
+
 export function parseOfxTransactions(text) {
   const content = String(text || "").trim();
 

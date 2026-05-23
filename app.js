@@ -16,6 +16,7 @@ import {
   normalizeStoredExpense,
   parseMoneyInput,
   parseOfxTransactions,
+  sortExpenses,
   sumExpenses,
   validateBackup,
 } from "./app-core.js";
@@ -27,6 +28,10 @@ const state = {
   expenses: [],
   selectedMonth: getCurrentMonth(),
   importDrafts: [],
+  expenseSort: {
+    field: "name",
+    direction: "asc",
+  },
 };
 
 const elements = {
@@ -50,7 +55,11 @@ const elements = {
   categorySummary: document.querySelector("#categorySummary"),
   categorySummaryHint: document.querySelector("#categorySummaryHint"),
   expenseListHint: document.querySelector("#expenseListHint"),
+  expenseSortControls: document.querySelector("#expenseSortControls"),
+  expenseSortField: document.querySelector("#expenseSortField"),
+  expenseSortDirectionButton: document.querySelector("#expenseSortDirectionButton"),
   expenseTableBody: document.querySelector("#expenseTableBody"),
+  expenseTableHead: document.querySelector("#expenseTableHead"),
   exportButton: document.querySelector("#exportButton"),
   importInput: document.querySelector("#importInput"),
   ofxInput: document.querySelector("#ofxInput"),
@@ -101,6 +110,22 @@ function bindEvents() {
   elements.confirmOfxImportButton.addEventListener("click", confirmOfxImport);
   elements.cancelOfxImportButton.addEventListener("click", clearImportReview);
   elements.clearMonthButton.addEventListener("click", clearSelectedMonth);
+  elements.expenseSortField.addEventListener("change", () => {
+    setExpenseSort(elements.expenseSortField.value);
+  });
+  elements.expenseSortDirectionButton.addEventListener("click", () => {
+    state.expenseSort.direction = state.expenseSort.direction === "asc" ? "desc" : "asc";
+    render();
+  });
+  elements.expenseTableHead.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-sort-field]");
+
+    if (!button) {
+      return;
+    }
+
+    setExpenseSort(button.dataset.sortField);
+  });
 
   elements.expenseTableBody.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-action]");
@@ -119,6 +144,21 @@ function bindEvents() {
       removeExpense(id);
     }
   });
+}
+
+function setExpenseSort(field) {
+  if (!["name", "category", "value"].includes(field)) {
+    return;
+  }
+
+  if (state.expenseSort.field === field) {
+    state.expenseSort.direction = state.expenseSort.direction === "asc" ? "desc" : "asc";
+  } else {
+    state.expenseSort.field = field;
+    state.expenseSort.direction = "asc";
+  }
+
+  render();
 }
 
 function populateCategories() {
@@ -282,6 +322,7 @@ function render() {
   elements.topCategory.textContent = topCategory ? topCategory.category : "-";
   elements.clearMonthButton.disabled = monthExpenses.length === 0;
 
+  renderExpenseSortControls();
   renderCategorySummary(categoryTotals, total);
   renderExpenseTable(monthExpenses);
 }
@@ -335,10 +376,33 @@ function renderCategorySummary(categoryTotals, total) {
   }).join("");
 }
 
+function renderExpenseSortControls() {
+  const directionLabel = state.expenseSort.direction === "asc" ? "Crescente" : "Decrescente";
+
+  elements.expenseSortField.value = state.expenseSort.field;
+  elements.expenseSortDirectionButton.textContent = directionLabel;
+  elements.expenseSortDirectionButton.setAttribute("aria-label", `Ordenação ${directionLabel.toLowerCase()}`);
+
+  for (const button of elements.expenseTableHead.querySelectorAll("[data-sort-field]")) {
+    const isActive = button.dataset.sortField === state.expenseSort.field;
+    const indicator = button.querySelector("[data-sort-indicator]");
+    const th = button.closest("th");
+
+    button.setAttribute("aria-pressed", String(isActive));
+    if (indicator) {
+      indicator.textContent = isActive ? directionLabel : "";
+    }
+    if (th) {
+      th.setAttribute(
+        "aria-sort",
+        isActive ? (state.expenseSort.direction === "asc" ? "ascending" : "descending") : "none",
+      );
+    }
+  }
+}
+
 function renderExpenseTable(expenses) {
-  const sortedExpenses = [...expenses].sort((a, b) => (
-    a.name.localeCompare(b.name, "pt-BR")
-  ));
+  const sortedExpenses = sortExpenses(expenses, state.expenseSort);
   const hasRows = sortedExpenses.length > 0;
 
   elements.expenseListHint.hidden = hasRows;

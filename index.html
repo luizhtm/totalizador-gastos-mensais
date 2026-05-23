@@ -36,8 +36,8 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     >
-    <link rel="stylesheet" href="styles.css">
-    <script type="module" src="app.js"></script>
+    <link rel="stylesheet" href="styles.css?v=20260523-sorting">
+    <script type="module" src="app.js?v=20260523-sorting"></script>
   </head>
   <body>
     <header class="site-header">
@@ -174,13 +174,42 @@
             </button>
           </header>
 
+          <div id="expenseSortControls" class="expense-sort-controls" aria-label="Ordenação dos gastos">
+            <label for="expenseSortField">
+              Ordenar por
+              <select id="expenseSortField">
+                <option value="name">Item</option>
+                <option value="category">Categoria</option>
+                <option value="value">Valor</option>
+              </select>
+            </label>
+            <button id="expenseSortDirectionButton" class="secondary" type="button">
+              Crescente
+            </button>
+          </div>
+
           <div class="table-wrap">
             <table>
-              <thead>
+              <thead id="expenseTableHead">
                 <tr>
-                  <th>Item</th>
-                  <th>Categoria</th>
-                  <th class="numeric">Valor</th>
+                  <th aria-sort="ascending">
+                    <button class="table-sort-button" type="button" data-sort-field="name" aria-pressed="true">
+                      Item
+                      <span data-sort-indicator>Crescente</span>
+                    </button>
+                  </th>
+                  <th aria-sort="none">
+                    <button class="table-sort-button" type="button" data-sort-field="category" aria-pressed="false">
+                      Categoria
+                      <span data-sort-indicator></span>
+                    </button>
+                  </th>
+                  <th class="numeric" aria-sort="none">
+                    <button class="table-sort-button table-sort-button-numeric" type="button" data-sort-field="value" aria-pressed="false">
+                      Valor
+                      <span data-sort-indicator></span>
+                    </button>
+                  </th>
                   <th class="actions-cell">Ações</th>
                 </tr>
               </thead>

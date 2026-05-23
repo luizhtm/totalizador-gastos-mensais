@@ -572,6 +572,45 @@ input[type="reset"]:hover {
   overflow-x: auto;
 }
 
+.expense-sort-controls {
+  display: none;
+}
+
+.table-sort-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: inherit;
+  display: inline-flex;
+  font: inherit;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.table-sort-button:hover,
+.table-sort-button:focus {
+  background: transparent;
+  color: var(--app-accent);
+}
+
+.table-sort-button[aria-pressed="true"] {
+  color: var(--app-accent);
+}
+
+.table-sort-button span {
+  color: var(--app-text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.table-sort-button-numeric {
+  justify-content: flex-end;
+  width: 100%;
+}
+
 table {
   margin-bottom: 0;
 }
@@ -892,6 +931,19 @@ dialog.expense-dialog article > .modal-heading {
   .privacy-tags li {
     font-size: 0.74rem;
     padding: 0.4rem 0.5rem;
+  }
+
+  .expense-sort-controls {
+    display: grid;
+    gap: 0.65rem;
+    grid-template-columns: 1fr;
+    margin: 0;
+    padding: 0.85rem;
+  }
+
+  .expense-sort-controls label,
+  .expense-sort-controls button {
+    margin: 0;
   }
 
   .import-review-heading {
