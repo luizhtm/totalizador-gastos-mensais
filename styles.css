@@ -584,7 +584,7 @@ input[type="reset"]:hover {
   color: inherit;
   display: inline-flex;
   font: inherit;
-  gap: 0.4rem;
+  gap: 0.35rem;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -593,17 +593,24 @@ input[type="reset"]:hover {
 .table-sort-button:hover,
 .table-sort-button:focus {
   background: transparent;
-  color: var(--app-accent);
+  color: var(--app-text);
 }
 
 .table-sort-button[aria-pressed="true"] {
-  color: var(--app-accent);
+  color: inherit;
 }
 
-.table-sort-button span {
+.table-sort-button .sort-icon {
   color: var(--app-text-muted);
-  font-size: 0.76rem;
+  display: inline-flex;
+  font-size: 0.95rem;
   font-weight: 600;
+  line-height: 1;
+  min-width: 0.8rem;
+}
+
+.table-sort-button[aria-pressed="true"] .sort-icon {
+  color: var(--app-accent);
 }
 
 .table-sort-button-numeric {

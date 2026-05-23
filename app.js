@@ -378,6 +378,7 @@ function renderCategorySummary(categoryTotals, total) {
 
 function renderExpenseSortControls() {
   const directionLabel = state.expenseSort.direction === "asc" ? "Crescente" : "Decrescente";
+  const directionIcon = state.expenseSort.direction === "asc" ? "↑" : "↓";
 
   elements.expenseSortField.value = state.expenseSort.field;
   elements.expenseSortDirectionButton.textContent = directionLabel;
@@ -390,7 +391,7 @@ function renderExpenseSortControls() {
 
     button.setAttribute("aria-pressed", String(isActive));
     if (indicator) {
-      indicator.textContent = isActive ? directionLabel : "";
+      indicator.textContent = isActive ? directionIcon : "";
     }
     if (th) {
       th.setAttribute(
