@@ -1022,19 +1022,30 @@ dialog.expense-dialog article > .modal-heading {
   }
 
   .site-header-inner strong {
-    font-size: 1.05rem;
+    font-size: 0.98rem;
   }
 
   .site-icon {
     border-radius: 0.65rem;
-    height: 44px;
-    width: 44px;
+    height: 40px;
+    width: 40px;
+  }
+
+  .site-brand {
+    gap: 0.6rem;
+  }
+
+  .theme-toggle {
+    gap: 0.1rem;
+    padding: 0.15rem;
   }
 
   .theme-toggle button {
-    height: 2.2rem;
+    border-radius: 0.75rem;
+    height: 2rem;
+    min-height: 2rem;
     padding: 0.45rem;
-    width: 2.2rem;
+    width: 2rem;
   }
 
   .theme-toggle span {
