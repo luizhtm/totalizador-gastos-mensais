@@ -659,6 +659,7 @@ tbody tr:last-child td {
 
 .icon-action {
   align-items: center;
+  box-shadow: none;
   border-radius: 0.5rem;
   display: inline-flex;
   gap: 0.4rem;
@@ -679,25 +680,27 @@ tbody tr:last-child td {
 }
 
 .icon-action-edit {
-  background: var(--app-muted);
-  border-color: var(--app-muted);
+  background: var(--app-muted) !important;
+  border-color: var(--app-muted) !important;
   color: #ffffff;
 }
 
 .icon-action-edit:hover {
-  background: #46556f;
-  border-color: #46556f;
+  background: #46556f !important;
+  border-color: #46556f !important;
+  color: #ffffff;
 }
 
 .icon-action-remove {
-  background: #ffffff;
-  border-color: #f08a84;
-  color: var(--app-danger);
+  background: #ffffff !important;
+  border-color: #f08a84 !important;
+  color: var(--app-danger) !important;
 }
 
 .icon-action-remove:hover {
-  background: #fff5f4;
-  border-color: var(--app-danger);
+  background: #fff5f4 !important;
+  border-color: var(--app-danger) !important;
+  color: var(--app-danger) !important;
 }
 
 .empty-state {
