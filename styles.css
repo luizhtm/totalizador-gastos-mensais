@@ -690,10 +690,6 @@ tbody tr:last-child td {
   --pico-background-color: var(--app-muted);
   --pico-border-color: var(--app-muted);
   --pico-color: #ffffff;
-  background: var(--app-muted) !important;
-  background-color: var(--app-muted) !important;
-  border-color: var(--app-muted) !important;
-  color: #ffffff !important;
 }
 
 .icon-action-edit:hover,
@@ -702,19 +698,12 @@ tbody tr:last-child td {
   --pico-background-color: #46556f;
   --pico-border-color: #46556f;
   --pico-color: #ffffff;
-  background: #46556f !important;
-  background-color: #46556f !important;
-  border-color: #46556f !important;
-  color: #ffffff !important;
 }
 
 .icon-action-remove {
   --pico-background-color: #ffffff;
   --pico-border-color: #f08a84;
   --pico-color: var(--app-danger);
-  background: #ffffff !important;
-  border-color: #f08a84 !important;
-  color: var(--app-danger) !important;
 }
 
 .icon-action-remove:hover,
@@ -723,9 +712,6 @@ tbody tr:last-child td {
   --pico-background-color: #fff5f4;
   --pico-border-color: var(--app-danger);
   --pico-color: var(--app-danger);
-  background: #fff5f4 !important;
-  border-color: var(--app-danger) !important;
-  color: var(--app-danger) !important;
 }
 
 .empty-state {

@@ -427,14 +427,14 @@ function renderExpenseTable(expenses) {
       <td class="numeric" data-label="Valor">${formatCurrency(expense.value)}</td>
       <td class="actions-cell" data-label="Ações">
         <div class="row-actions">
-          <button class="icon-action icon-action-edit" type="button" data-action="edit" data-id="${expense.id}" aria-label="Editar gasto ${escapeAttribute(expense.name)}">
+          <button class="secondary icon-action icon-action-edit" type="button" data-action="edit" data-id="${expense.id}" aria-label="Editar gasto ${escapeAttribute(expense.name)}">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M12 20h9"/>
               <path d="m16.5 3.5 4 4L7 21H3v-4L16.5 3.5Z"/>
             </svg>
             <span>Editar</span>
           </button>
-          <button class="icon-action icon-action-remove" type="button" data-action="remove" data-id="${expense.id}" aria-label="Remover gasto ${escapeAttribute(expense.name)}">
+          <button class="outline danger-button icon-action icon-action-remove" type="button" data-action="remove" data-id="${expense.id}" aria-label="Remover gasto ${escapeAttribute(expense.name)}">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M3 6h18"/>
               <path d="M8 6V4h8v2"/>
