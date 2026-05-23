@@ -704,6 +704,9 @@ tbody tr:last-child td {
   --pico-background-color: #ffffff;
   --pico-border-color: #f08a84;
   --pico-color: var(--app-danger);
+  background: #ffffff !important;
+  border-color: #f08a84 !important;
+  color: var(--app-danger) !important;
 }
 
 .icon-action-remove:hover,
@@ -712,6 +715,9 @@ tbody tr:last-child td {
   --pico-background-color: #fff5f4;
   --pico-border-color: var(--app-danger);
   --pico-color: var(--app-danger);
+  background: #fff5f4 !important;
+  border-color: var(--app-danger) !important;
+  color: var(--app-danger) !important;
 }
 
 .empty-state {
