@@ -1022,7 +1022,7 @@ dialog.expense-dialog article > .modal-heading {
   }
 
   .site-header-inner strong {
-    font-size: 0.98rem;
+    display: none;
   }
 
   .site-icon {
