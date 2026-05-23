@@ -106,6 +106,8 @@ function bindEvents() {
     openExpenseDialog();
   });
   elements.expenseForm.addEventListener("submit", handleFormSubmit);
+  elements.valueInput.addEventListener("input", maskValueInput);
+  elements.valueInput.addEventListener("blur", normalizeValueInput);
   elements.cancelEditButton.addEventListener("click", closeExpenseDialog);
   elements.closeDialogButton.addEventListener("click", closeExpenseDialog);
   elements.expenseDialog.addEventListener("close", resetForm);
@@ -176,7 +178,7 @@ function handleFormSubmit(event) {
 }
 
 function readFormExpense() {
-  const value = Number(elements.valueInput.value);
+  const value = parseMoneyInput(elements.valueInput.value);
 
   if (!Number.isFinite(value) || value <= 0) {
     return null;
@@ -203,7 +205,7 @@ function startEdit(id) {
   elements.expenseId.value = expense.id;
   elements.nameInput.value = expense.name;
   elements.categoryInput.value = expense.category;
-  elements.valueInput.value = String(expense.value);
+  elements.valueInput.value = formatMoneyInput(expense.value);
   elements.descriptionInput.value = expense.description || "";
   elements.formTitle.textContent = "Editar gasto";
   elements.submitButton.textContent = "Salvar alteracoes";
@@ -215,9 +217,29 @@ function startEdit(id) {
 function resetForm() {
   elements.expenseForm.reset();
   elements.expenseId.value = "";
+  elements.valueInput.value = "";
   elements.categoryInput.value = CATEGORIES[0];
   elements.formTitle.textContent = "Adicionar gasto";
   elements.submitButton.textContent = "Adicionar";
+}
+
+function maskValueInput() {
+  const digits = elements.valueInput.value.replace(/\D/g, "");
+
+  if (!digits) {
+    elements.valueInput.value = "";
+    return;
+  }
+
+  elements.valueInput.value = formatMoneyInput(Number(digits) / 100);
+}
+
+function normalizeValueInput() {
+  const value = parseMoneyInput(elements.valueInput.value);
+
+  elements.valueInput.value = Number.isFinite(value) && value > 0
+    ? formatMoneyInput(value)
+    : "";
 }
 
 function openExpenseDialog() {
@@ -956,6 +978,23 @@ function formatCurrency(value) {
     style: "currency",
     currency: "BRL",
   }).format(value);
+}
+
+function formatMoneyInput(value) {
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function parseMoneyInput(value) {
+  const normalized = String(value || "")
+    .replace(/\./g, "")
+    .replace(",", ".")
+    .trim();
+  const parsed = Number(normalized);
+
+  return Number.isFinite(parsed) ? parsed : NaN;
 }
 
 function formatPercent(value) {
