@@ -578,26 +578,30 @@ input[type="reset"]:hover {
 
 .table-sort-button {
   align-items: center;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+  --pico-background-color: transparent;
+  --pico-border-color: transparent;
+  --pico-box-shadow: none;
+  --pico-color: inherit;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
   color: inherit;
   display: inline-flex;
   font: inherit;
   gap: 0.35rem;
   margin: 0;
-  padding: 0;
+  padding: 0 !important;
   text-align: left;
 }
 
 .table-sort-button:hover,
-.table-sort-button:focus {
-  background: transparent;
-  color: var(--app-text);
-}
-
+.table-sort-button:focus,
+.table-sort-button:active,
 .table-sort-button[aria-pressed="true"] {
-  color: inherit;
+  background: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: var(--app-text);
 }
 
 .table-sort-button .sort-icon {
