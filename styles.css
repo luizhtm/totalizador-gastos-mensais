@@ -691,6 +691,7 @@ tbody tr:last-child td {
   --pico-border-color: var(--app-muted);
   --pico-color: #ffffff;
   background: var(--app-muted) !important;
+  background-color: var(--app-muted) !important;
   border-color: var(--app-muted) !important;
   color: #ffffff !important;
 }
@@ -702,6 +703,7 @@ tbody tr:last-child td {
   --pico-border-color: #46556f;
   --pico-color: #ffffff;
   background: #46556f !important;
+  background-color: #46556f !important;
   border-color: #46556f !important;
   color: #ffffff !important;
 }
