@@ -391,7 +391,7 @@ function renderExpenseSortControls() {
 
     button.setAttribute("aria-pressed", String(isActive));
     if (indicator) {
-      indicator.textContent = isActive ? directionIcon : "";
+      indicator.textContent = isActive ? directionIcon : "↕";
     }
     if (th) {
       th.setAttribute(

@@ -605,7 +605,7 @@ input[type="reset"]:hover {
 }
 
 .table-sort-button .sort-icon {
-  color: var(--app-text-muted);
+  color: currentColor;
   display: inline-flex;
   font-size: 0.95rem;
   font-weight: 600;
