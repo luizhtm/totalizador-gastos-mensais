@@ -635,7 +635,7 @@ tbody tr:last-child td {
 }
 
 .actions-cell {
-  min-width: 10.5rem;
+  min-width: 7rem;
   text-align: right;
 }
 
@@ -657,9 +657,47 @@ tbody tr:last-child td {
   justify-content: flex-end;
 }
 
-.row-actions button {
+.icon-action {
+  align-items: center;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  gap: 0.4rem;
+  justify-content: center;
   margin: 0;
-  padding: 0.35rem 0.55rem;
+  min-height: 2.45rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.icon-action svg {
+  fill: none;
+  height: 1.05rem;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  width: 1.05rem;
+}
+
+.icon-action-edit {
+  background: var(--app-muted);
+  border-color: var(--app-muted);
+  color: #ffffff;
+}
+
+.icon-action-edit:hover {
+  background: #46556f;
+  border-color: #46556f;
+}
+
+.icon-action-remove {
+  background: #ffffff;
+  border-color: #f08a84;
+  color: var(--app-danger);
+}
+
+.icon-action-remove:hover {
+  background: #fff5f4;
+  border-color: var(--app-danger);
 }
 
 .empty-state {
@@ -895,6 +933,10 @@ dialog.expense-dialog article > .modal-heading {
     align-items: stretch;
     flex-direction: column;
   }
+
+  .icon-action {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1039,6 +1081,10 @@ dialog.expense-dialog article > .modal-heading {
 
   .row-actions {
     flex: 1 1 auto;
+  }
+
+  .icon-action {
+    min-height: 2.75rem;
   }
 
   .import-review-body {
