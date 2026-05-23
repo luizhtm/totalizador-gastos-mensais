@@ -847,7 +847,7 @@ dialog.expense-dialog article > .modal-heading {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .app-shell {
     padding-block: 1.5rem;
   }
