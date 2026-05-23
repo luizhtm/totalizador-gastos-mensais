@@ -1028,7 +1028,7 @@ dialog.expense-dialog article > .modal-heading {
   }
 
   .site-header-inner strong {
-    display: none;
+    font-size: 0.98rem;
   }
 
   .site-icon {
