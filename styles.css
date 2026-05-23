@@ -165,12 +165,16 @@ button,
 
 .theme-toggle {
   align-items: center;
+  align-self: center;
   background: var(--app-surface-soft);
   border: 1px solid var(--app-border);
   border-radius: 999px;
   display: inline-flex;
+  flex: 1 1 28rem;
   gap: 0.2rem;
   margin-left: auto;
+  max-width: min(50%, 46rem);
+  min-width: min(100%, 26rem);
   padding: 0.2rem;
 }
 
@@ -185,7 +189,9 @@ button,
   box-shadow: none !important;
   color: var(--app-text-muted);
   display: inline-flex;
+  flex: 1 1 0;
   gap: 0.35rem;
+  justify-content: center;
   margin: 0;
   min-height: 2.25rem;
   padding: 0.45rem 0.6rem;
@@ -1036,13 +1042,18 @@ dialog.expense-dialog article > .modal-heading {
   }
 
   .theme-toggle {
+    flex: 0 0 auto;
     gap: 0.1rem;
+    margin-left: auto;
+    max-width: max-content;
+    min-width: 0;
     padding: 0.15rem;
   }
 
   .theme-toggle button {
     border-radius: 0.75rem;
     height: 2rem;
+    flex: 0 0 auto;
     min-height: 2rem;
     padding: 0.45rem;
     width: 2rem;
