@@ -777,6 +777,11 @@ td {
   background: transparent;
 }
 
+th,
+td {
+  border-bottom-color: var(--app-divider);
+}
+
 tbody tr:last-child td {
   border-bottom: 0;
 }
