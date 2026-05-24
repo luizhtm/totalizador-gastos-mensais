@@ -3,6 +3,7 @@
   --app-bg: #f6f8fb;
   --app-surface: #ffffff;
   --app-surface-soft: #f8fafc;
+  --app-section-surface: #f8fafc;
   --app-text: #111827;
   --app-text-muted: #5b667a;
   --app-border: #d7dce5;
@@ -48,7 +49,7 @@
   --pico-primary-hover-border: var(--app-accent-dark);
   --pico-background-color: var(--app-bg);
   --pico-card-background-color: var(--app-surface);
-  --pico-card-sectioning-background-color: var(--app-surface);
+  --pico-card-sectioning-background-color: var(--app-section-surface);
   --pico-color: var(--app-text);
   --pico-muted-color: var(--app-text-muted);
   --pico-form-element-background-color: #ffffff;
@@ -62,6 +63,7 @@
   --app-bg: #0f172a;
   --app-surface: #172033;
   --app-surface-soft: #111827;
+  --app-section-surface: #141d2e;
   --app-text: #e5e7eb;
   --app-text-muted: #a7b0c0;
   --app-border: #334155;
