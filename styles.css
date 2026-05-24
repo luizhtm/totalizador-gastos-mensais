@@ -764,7 +764,17 @@ input[type="reset"]:hover {
 }
 
 table {
+  --pico-table-row-stripped-background-color: transparent;
   margin-bottom: 0;
+}
+
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  background: transparent;
 }
 
 tbody tr:last-child td {
