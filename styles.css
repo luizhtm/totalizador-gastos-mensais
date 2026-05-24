@@ -1022,6 +1022,26 @@ dialog.expense-dialog article > .modal-heading {
   }
 }
 
+@media (max-width: 900px) {
+  .theme-toggle {
+    flex: 0 0 auto;
+    max-width: max-content;
+    min-width: 0;
+  }
+
+  .theme-toggle button {
+    flex: 0 0 auto;
+    height: 2.2rem;
+    min-height: 2.2rem;
+    padding: 0.45rem;
+    width: 2.2rem;
+  }
+
+  .theme-toggle span {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .site-header-inner {
     gap: 0.65rem;
@@ -1049,7 +1069,7 @@ dialog.expense-dialog article > .modal-heading {
     max-width: max-content;
     min-width: 0;
     padding: 0.15rem;
-    transform: none;
+    transform: translateY(0.25rem);
   }
 
   .theme-toggle button {
