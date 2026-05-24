@@ -176,6 +176,7 @@ button,
   max-width: min(50%, 46rem);
   min-width: min(100%, 26rem);
   padding: 0.2rem;
+  transform: translateY(0.25rem);
 }
 
 .theme-toggle button {
@@ -1048,6 +1049,7 @@ dialog.expense-dialog article > .modal-heading {
     max-width: max-content;
     min-width: 0;
     padding: 0.15rem;
+    transform: none;
   }
 
   .theme-toggle button {
