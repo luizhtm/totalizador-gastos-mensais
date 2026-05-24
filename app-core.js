@@ -95,6 +95,28 @@ export function sortExpenses(expenses, sort = { field: "name", direction: "asc" 
   });
 }
 
+export function updateExpenseCategoryByIds(expenses, ids, category) {
+  const selectedIds = new Set(ids);
+
+  if (!CATEGORIES.includes(category) || selectedIds.size === 0) {
+    return expenses;
+  }
+
+  return expenses.map((expense) => (
+    selectedIds.has(expense.id) ? { ...expense, category } : expense
+  ));
+}
+
+export function removeExpensesByIds(expenses, ids) {
+  const selectedIds = new Set(ids);
+
+  if (selectedIds.size === 0) {
+    return expenses;
+  }
+
+  return expenses.filter((expense) => !selectedIds.has(expense.id));
+}
+
 function compareExpenseField(a, b, field) {
   if (field === "value") {
     return a.value - b.value;

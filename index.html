@@ -196,15 +196,12 @@
           <div id="categorySummary" class="category-summary"></div>
         </article>
 
-        <article class="panel">
-          <header class="panel-heading list-heading">
+        <article class="panel expense-list-panel">
+          <header id="expenseListHeading" class="panel-heading list-heading">
             <div>
               <h2>Itens cadastrados</h2>
               <p id="expenseListHint">Nenhum gasto cadastrado neste mês.</p>
             </div>
-            <button id="clearMonthButton" class="outline danger-button" type="button">
-              Limpar mês
-            </button>
           </header>
 
           <div id="expenseSortControls" class="expense-sort-controls" aria-label="Ordenação dos gastos">
@@ -225,6 +222,11 @@
             <table>
               <thead id="expenseTableHead">
                 <tr>
+                  <th class="selection-cell">
+                    <label class="expense-select-all">
+                      <input id="selectAllRowsInput" type="checkbox" aria-label="Selecionar ou desselecionar todos os gastos">
+                    </label>
+                  </th>
                   <th aria-sort="ascending">
                     <button class="table-sort-button" type="button" data-sort-field="name" aria-pressed="true">
                       <span>Item</span>
@@ -243,11 +245,41 @@
                       <span class="sort-icon" data-sort-indicator aria-hidden="true">↕</span>
                     </button>
                   </th>
-                  <th class="actions-cell">Ações</th>
+                  <th id="expenseActionsHeader" class="actions-cell">Ações</th>
                 </tr>
               </thead>
               <tbody id="expenseTableBody"></tbody>
             </table>
+          </div>
+
+          <div id="bulkActionBar" class="bulk-action-bar" hidden>
+            <label id="mobileSelectAllControl" class="mobile-select-all-control">
+              <input id="mobileSelectAllRowsInput" type="checkbox" aria-label="Selecionar ou desselecionar todos os gastos">
+              <span id="mobileSelectAllLabel">Selecionar todos</span>
+            </label>
+            <div class="bulk-actions" aria-label="Ações em massa">
+              <strong id="bulkSelectionSummary" class="bulk-selection-summary" hidden>0 selecionados</strong>
+              <div class="bulk-category-action">
+                <select id="bulkCategoryInput" aria-label="Categoria para gastos selecionados" hidden></select>
+                <button id="applyBulkCategoryButton" class="secondary icon-action bulk-icon-action" type="button" title="Alterar categoria dos selecionados" aria-label="Alterar categoria dos selecionados" hidden>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/>
+                    <path d="M7.5 7.5h.01"/>
+                  </svg>
+                  <span>Alterar categoria</span>
+                </button>
+              </div>
+              <button id="removeSelectedExpensesButton" class="outline danger-button icon-action icon-action-remove bulk-icon-action" type="button" title="Remover selecionados" aria-label="Remover selecionados" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M3 6h18"/>
+                  <path d="M8 6V4h8v2"/>
+                  <path d="M19 6 18 20H6L5 6"/>
+                  <path d="M10 11v5"/>
+                  <path d="M14 11v5"/>
+                </svg>
+                <span>Remover selecionados</span>
+              </button>
+            </div>
           </div>
         </article>
       </section>

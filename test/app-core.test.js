@@ -13,10 +13,12 @@ import {
   normalizeThemeMode,
   parseMoneyInput,
   parseOfxTransactions,
+  removeExpensesByIds,
   resolveThemeMode,
   sortExpenses,
   sumExpenses,
   suggestCategory,
+  updateExpenseCategoryByIds,
   validateBackup,
 } from "../app-core.js";
 
@@ -82,6 +84,24 @@ test("sorts expenses by item, category, and value", () => {
     "iFood",
     "Uber",
   ]);
+});
+
+test("updates categories and removes expenses by selected ids", () => {
+  const expenses = [
+    { id: "1", name: "Uber", category: "Transporte", value: 25 },
+    { id: "2", name: "iFood", category: "Alimentação", value: 60 },
+    { id: "3", name: "Internet", category: "Contas da casa", value: 100 },
+  ];
+
+  const updated = updateExpenseCategoryByIds(expenses, ["1", "2"], "Compras");
+
+  assert.equal(updated[0].category, "Compras");
+  assert.equal(updated[1].category, "Compras");
+  assert.equal(updated[2].category, "Contas da casa");
+  assert.equal(expenses[0].category, "Transporte");
+  assert.equal(updateExpenseCategoryByIds(expenses, ["1"], "Inexistente"), expenses);
+  assert.deepEqual(removeExpensesByIds(expenses, ["1", "3"]).map((expense) => expense.id), ["2"]);
+  assert.equal(removeExpensesByIds(expenses, []), expenses);
 });
 
 test("normalizes legacy and unknown categories", () => {

@@ -17,9 +17,11 @@ import {
   normalizeStoredExpense,
   parseMoneyInput,
   parseOfxTransactions,
+  removeExpensesByIds,
   resolveThemeMode,
   sortExpenses,
   sumExpenses,
+  updateExpenseCategoryByIds,
   validateBackup,
 } from "./app-core.js";
 
@@ -36,6 +38,7 @@ const state = {
     field: "name",
     direction: "asc",
   },
+  selectedExpenseIds: new Set(),
 };
 
 const elements = {
@@ -64,6 +67,16 @@ const elements = {
   expenseSortDirectionButton: document.querySelector("#expenseSortDirectionButton"),
   expenseTableBody: document.querySelector("#expenseTableBody"),
   expenseTableHead: document.querySelector("#expenseTableHead"),
+  selectAllRowsInput: document.querySelector("#selectAllRowsInput"),
+  mobileSelectAllControl: document.querySelector("#mobileSelectAllControl"),
+  mobileSelectAllRowsInput: document.querySelector("#mobileSelectAllRowsInput"),
+  mobileSelectAllLabel: document.querySelector("#mobileSelectAllLabel"),
+  expenseListHeading: document.querySelector("#expenseListHeading"),
+  bulkActionBar: document.querySelector("#bulkActionBar"),
+  bulkSelectionSummary: document.querySelector("#bulkSelectionSummary"),
+  bulkCategoryInput: document.querySelector("#bulkCategoryInput"),
+  applyBulkCategoryButton: document.querySelector("#applyBulkCategoryButton"),
+  removeSelectedExpensesButton: document.querySelector("#removeSelectedExpensesButton"),
   exportButton: document.querySelector("#exportButton"),
   importInput: document.querySelector("#importInput"),
   ofxInput: document.querySelector("#ofxInput"),
@@ -74,7 +87,6 @@ const elements = {
   importSelectedSummary: document.querySelector("#importSelectedSummary"),
   confirmOfxImportButton: document.querySelector("#confirmOfxImportButton"),
   cancelOfxImportButton: document.querySelector("#cancelOfxImportButton"),
-  clearMonthButton: document.querySelector("#clearMonthButton"),
   themeModeButtons: document.querySelectorAll("[data-theme-mode]"),
 };
 
@@ -93,6 +105,7 @@ function init() {
 function bindEvents() {
   elements.monthInput.addEventListener("change", () => {
     state.selectedMonth = elements.monthInput.value || getCurrentMonth();
+    clearExpenseSelection();
     saveState();
     resetForm();
     closeExpenseDialog();
@@ -116,7 +129,14 @@ function bindEvents() {
   elements.importReviewBody.addEventListener("change", updateImportSelectionSummary);
   elements.confirmOfxImportButton.addEventListener("click", confirmOfxImport);
   elements.cancelOfxImportButton.addEventListener("click", clearImportReview);
-  elements.clearMonthButton.addEventListener("click", clearSelectedMonth);
+  elements.applyBulkCategoryButton.addEventListener("click", applyBulkCategory);
+  elements.removeSelectedExpensesButton.addEventListener("click", removeSelectedExpenses);
+  elements.selectAllRowsInput.addEventListener("change", () => {
+    setAllExpensesSelection(elements.selectAllRowsInput.checked);
+  });
+  elements.mobileSelectAllRowsInput.addEventListener("change", () => {
+    setAllExpensesSelection(elements.mobileSelectAllRowsInput.checked);
+  });
   for (const button of elements.themeModeButtons) {
     button.addEventListener("click", () => {
       setThemeMode(button.dataset.themeMode);
@@ -155,6 +175,15 @@ function bindEvents() {
     if (button.dataset.action === "remove") {
       removeExpense(id);
     }
+  });
+  elements.expenseTableBody.addEventListener("change", (event) => {
+    const checkbox = event.target.closest("input[data-select-expense]");
+
+    if (!checkbox) {
+      return;
+    }
+
+    setExpenseSelection(checkbox.dataset.id, checkbox.checked);
   });
 }
 
@@ -200,6 +229,9 @@ function setExpenseSort(field) {
 
 function populateCategories() {
   elements.categoryInput.innerHTML = CATEGORIES.map((category) => (
+    `<option value="${escapeAttribute(category)}">${category}</option>`
+  )).join("");
+  elements.bulkCategoryInput.innerHTML = CATEGORIES.map((category) => (
     `<option value="${escapeAttribute(category)}">${category}</option>`
   )).join("");
 }
@@ -326,30 +358,90 @@ function removeExpense(id) {
   showFeedback("Gasto removido.");
 }
 
-function clearSelectedMonth() {
-  const monthExpenses = getSelectedMonthExpenses();
+function setExpenseSelection(id, selected) {
+  if (selected) {
+    state.selectedExpenseIds.add(id);
+  } else {
+    state.selectedExpenseIds.delete(id);
+  }
 
-  if (monthExpenses.length === 0) {
-    showFeedback("Não há gastos para limpar neste mês.");
+  render();
+}
+
+function clearExpenseSelection() {
+  state.selectedExpenseIds.clear();
+}
+
+function pruneExpenseSelection(monthExpenses) {
+  const currentIds = new Set(monthExpenses.map((expense) => expense.id));
+
+  for (const id of state.selectedExpenseIds) {
+    if (!currentIds.has(id)) {
+      state.selectedExpenseIds.delete(id);
+    }
+  }
+}
+
+function setAllExpensesSelection(selected) {
+  if (selected) {
+    for (const expense of getSelectedMonthExpenses()) {
+      state.selectedExpenseIds.add(expense.id);
+    }
+  } else {
+    clearExpenseSelection();
+  }
+  render();
+}
+
+function applyBulkCategory() {
+  const selectedIds = [...state.selectedExpenseIds];
+  const category = elements.bulkCategoryInput.value;
+
+  if (selectedIds.length === 0) {
     return;
   }
 
-  const shouldClear = window.confirm("Remover todos os gastos deste mês?");
+  const shouldApply = window.confirm(
+    `Alterar ${selectedIds.length} gastos selecionados para a categoria "${category}"?`
+  );
 
-  if (!shouldClear) {
+  if (!shouldApply) {
     return;
   }
 
-  state.expenses = state.expenses.filter((expense) => expense.month !== state.selectedMonth);
+  state.expenses = updateExpenseCategoryByIds(state.expenses, selectedIds, category);
   saveState();
+  clearExpenseSelection();
   resetForm();
   render();
-  showFeedback("Gastos do mês removidos.");
+  showFeedback(`${selectedIds.length} gastos atualizados.`);
+}
+
+function removeSelectedExpenses() {
+  const selectedIds = [...state.selectedExpenseIds];
+
+  if (selectedIds.length === 0) {
+    return;
+  }
+
+  const shouldRemove = window.confirm(`Remover ${selectedIds.length} gastos selecionados?`);
+
+  if (!shouldRemove) {
+    return;
+  }
+
+  state.expenses = removeExpensesByIds(state.expenses, selectedIds);
+  saveState();
+  clearExpenseSelection();
+  resetForm();
+  render();
+  showFeedback(`${selectedIds.length} gastos removidos.`);
 }
 
 function render() {
   renderMonthOptions();
   const monthExpenses = getSelectedMonthExpenses();
+  pruneExpenseSelection(monthExpenses);
   const total = sumExpenses(monthExpenses);
   const categoryTotals = getCategoryTotals(monthExpenses);
   const topCategory = getTopCategory(categoryTotals);
@@ -357,11 +449,38 @@ function render() {
   elements.totalAmount.textContent = formatCurrency(total);
   elements.expenseCount.textContent = String(monthExpenses.length);
   elements.topCategory.textContent = topCategory ? topCategory.category : "-";
-  elements.clearMonthButton.disabled = monthExpenses.length === 0;
 
   renderExpenseSortControls();
+  renderBulkActions(monthExpenses);
   renderCategorySummary(categoryTotals, total);
   renderExpenseTable(monthExpenses);
+}
+
+function renderBulkActions(monthExpenses) {
+  const selectedCount = state.selectedExpenseIds.size;
+  const hasRows = monthExpenses.length > 0;
+  const hasSelection = selectedCount > 0;
+  const allSelected = hasRows && selectedCount === monthExpenses.length;
+
+  elements.bulkActionBar.hidden = !hasSelection;
+  elements.bulkActionBar.classList.toggle("bulk-action-bar-sticky", hasSelection);
+  elements.bulkSelectionSummary.hidden = !hasSelection;
+  elements.bulkCategoryInput.hidden = !hasSelection;
+  elements.applyBulkCategoryButton.hidden = !hasSelection;
+  elements.removeSelectedExpensesButton.hidden = !hasSelection;
+  elements.bulkSelectionSummary.textContent = selectedCount === 1
+    ? "1 selecionado"
+    : `${selectedCount} selecionados`;
+  elements.selectAllRowsInput.disabled = !hasRows;
+  elements.selectAllRowsInput.checked = allSelected;
+  elements.selectAllRowsInput.indeterminate = hasSelection && !allSelected;
+  elements.mobileSelectAllControl.hidden = !hasRows;
+  elements.mobileSelectAllRowsInput.disabled = !hasRows;
+  elements.mobileSelectAllRowsInput.checked = allSelected;
+  elements.mobileSelectAllRowsInput.indeterminate = hasSelection && !allSelected;
+  elements.mobileSelectAllLabel.textContent = allSelected
+    ? "Todos selecionados"
+    : hasSelection ? "Alguns selecionados" : "Selecionar todos";
 }
 
 function renderMonthOptions() {
@@ -448,15 +567,25 @@ function renderExpenseTable(expenses) {
   if (!hasRows) {
     elements.expenseTableBody.innerHTML = `
       <tr>
-        <td class="empty-state" colspan="4">Adicione o primeiro gasto para este mês.</td>
+        <td class="empty-state" colspan="5">Adicione o primeiro gasto para este mês.</td>
       </tr>
     `;
     return;
   }
 
+  const hasSelection = state.selectedExpenseIds.size > 0;
+  const disabledEditTitle = "Cancele a seleção para editar este gasto.";
+  const disabledRemoveTitle = "Cancele a seleção para remover este gasto.";
+
   elements.expenseTableBody.innerHTML = sortedExpenses.map((expense) => `
-    <tr>
-      <td data-label="Item">
+    <tr class="${state.selectedExpenseIds.has(expense.id) ? "expense-row-selected" : ""}">
+      <td class="selection-cell" data-label="Selecionar">
+        <label class="expense-select">
+          <input type="checkbox" data-select-expense data-id="${expense.id}" ${state.selectedExpenseIds.has(expense.id) ? "checked" : ""}>
+          <span>Selecionar</span>
+        </label>
+      </td>
+      <td class="item-cell" data-label="Item">
         <span class="item-title">${escapeHtml(expense.name)}</span>
         ${expense.description ? `<span class="item-description">${escapeHtml(expense.description)}</span>` : ""}
       </td>
@@ -464,14 +593,14 @@ function renderExpenseTable(expenses) {
       <td class="numeric" data-label="Valor">${formatCurrency(expense.value)}</td>
       <td class="actions-cell" data-label="Ações">
         <div class="row-actions">
-          <button class="secondary icon-action icon-action-edit" type="button" data-action="edit" data-id="${expense.id}" aria-label="Editar gasto ${escapeAttribute(expense.name)}">
+          <button class="secondary icon-action icon-action-edit" type="button" data-action="edit" data-id="${expense.id}" ${hasSelection ? "disabled" : ""} title="${hasSelection ? disabledEditTitle : `Editar gasto ${escapeAttribute(expense.name)}`}" aria-label="${hasSelection ? disabledEditTitle : `Editar gasto ${escapeAttribute(expense.name)}`}">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M12 20h9"/>
               <path d="m16.5 3.5 4 4L7 21H3v-4L16.5 3.5Z"/>
             </svg>
             <span>Editar</span>
           </button>
-          <button class="outline danger-button icon-action icon-action-remove" type="button" data-action="remove" data-id="${expense.id}" aria-label="Remover gasto ${escapeAttribute(expense.name)}">
+          <button class="outline danger-button icon-action icon-action-remove" type="button" data-action="remove" data-id="${expense.id}" ${hasSelection ? "disabled" : ""} title="${hasSelection ? disabledRemoveTitle : `Remover gasto ${escapeAttribute(expense.name)}`}" aria-label="${hasSelection ? disabledRemoveTitle : `Remover gasto ${escapeAttribute(expense.name)}`}">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M3 6h18"/>
               <path d="M8 6V4h8v2"/>
@@ -687,6 +816,7 @@ function confirmOfxImport() {
     state.expenses.push(...expensesToImport);
     state.selectedMonth = expensesToImport[0].month;
     elements.monthInput.value = state.selectedMonth;
+    clearExpenseSelection();
     saveState();
     clearImportReview();
     render();
@@ -732,6 +862,7 @@ async function importBackup(event) {
       ? payload.selectedMonth
       : state.selectedMonth || getCurrentMonth();
     elements.monthInput.value = state.selectedMonth;
+    clearExpenseSelection();
     saveState();
     resetForm();
     render();
