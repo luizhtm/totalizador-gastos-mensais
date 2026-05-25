@@ -242,7 +242,7 @@ function handleFormSubmit(event) {
   const expense = readFormExpense();
 
   if (!expense) {
-    showFeedback("Informe um valor maior que zero.");
+    showFeedback("Informe um valor maior que zero.", "warning");
     return;
   }
 
@@ -252,14 +252,14 @@ function handleFormSubmit(event) {
     state.expenses = state.expenses.map((item) => (
       item.id === editingId ? { ...item, ...expense, id: editingId } : item
     ));
-    showFeedback("Gasto atualizado.");
+    showFeedback("Gasto atualizado.", "success");
   } else {
     state.expenses.push({
       ...expense,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     });
-    showFeedback("Gasto adicionado.");
+    showFeedback("Gasto adicionado.", "success");
   }
 
   saveState();
@@ -355,7 +355,7 @@ function removeExpense(id) {
   saveState();
   resetForm();
   render();
-  showFeedback("Gasto removido.");
+  showFeedback("Gasto removido.", "success");
 }
 
 function setExpenseSelection(id, selected) {
@@ -414,7 +414,7 @@ function applyBulkCategory() {
   clearExpenseSelection();
   resetForm();
   render();
-  showFeedback(`${selectedIds.length} gastos atualizados.`);
+  showFeedback(`${selectedIds.length} gastos atualizados.`, "success");
 }
 
 function removeSelectedExpenses() {
@@ -435,7 +435,7 @@ function removeSelectedExpenses() {
   clearExpenseSelection();
   resetForm();
   render();
-  showFeedback(`${selectedIds.length} gastos removidos.`);
+  showFeedback(`${selectedIds.length} gastos removidos.`, "success");
 }
 
 function render() {
@@ -464,6 +464,7 @@ function renderBulkActions(monthExpenses) {
 
   elements.bulkActionBar.hidden = !hasSelection;
   elements.bulkActionBar.classList.toggle("bulk-action-bar-sticky", hasSelection);
+  elements.feedback.classList.toggle("toast-region-raised", hasSelection);
   elements.bulkSelectionSummary.hidden = !hasSelection;
   elements.bulkCategoryInput.hidden = !hasSelection;
   elements.applyBulkCategoryButton.hidden = !hasSelection;
@@ -640,7 +641,7 @@ function exportBackup() {
   link.download = BACKUP_FILENAME;
   link.click();
   URL.revokeObjectURL(url);
-  showFeedback("Arquivo de backup gerado.");
+  showFeedback("Arquivo de backup gerado.", "success");
 }
 
 async function handleOfxImportFile(event) {
@@ -657,16 +658,16 @@ async function handleOfxImportFile(event) {
 
     if (drafts.length === 0) {
       clearImportReview();
-      showFeedback("Nenhum gasto foi encontrado no arquivo OFX.");
+      showFeedback("Nenhum gasto foi encontrado no arquivo OFX.", "warning");
       return;
     }
 
     state.importDrafts = drafts;
     renderImportReview(transactions.length);
-    showFeedback("Revise os gastos extraídos antes de importar.");
+    showFeedback("Revise os gastos extraídos antes de importar.", "info");
   } catch (error) {
     clearImportReview();
-    showFeedback(error.message || "Não foi possível importar o arquivo OFX.");
+    showFeedback(error.message || "Não foi possível importar o arquivo OFX.", "warning");
   } finally {
     elements.ofxInput.value = "";
   }
@@ -808,7 +809,7 @@ function confirmOfxImport() {
     }
 
     if (expensesToImport.length === 0) {
-      showFeedback(skipped > 0 ? "Todos os gastos selecionados ja haviam sido importados." : "Nenhuma transacao foi selecionada.");
+      showFeedback(skipped > 0 ? "Todos os gastos selecionados ja haviam sido importados." : "Nenhuma transacao foi selecionada.", "warning");
       updateImportSelectionSummary();
       return;
     }
@@ -820,9 +821,9 @@ function confirmOfxImport() {
     saveState();
     clearImportReview();
     render();
-    showFeedback(`${expensesToImport.length} gastos importados${skipped ? `; ${skipped} duplicados ignorados` : ""}.`);
+    showFeedback(`${expensesToImport.length} gastos importados${skipped ? `; ${skipped} duplicados ignorados` : ""}.`, "success");
   } catch (error) {
-    showFeedback(error.message || "Não foi possível concluir a importação.");
+    showFeedback(error.message || "Não foi possível concluir a importação.", "warning");
   }
 }
 
@@ -866,9 +867,9 @@ async function importBackup(event) {
     saveState();
     resetForm();
     render();
-    showFeedback("Dados importados com sucesso.");
+    showFeedback("Dados importados com sucesso.", "success");
   } catch (error) {
-    showFeedback(error.message || "Não foi possível importar o arquivo.");
+    showFeedback(error.message || "Não foi possível importar o arquivo.", "warning");
   } finally {
     elements.importInput.value = "";
   }
@@ -903,12 +904,35 @@ function saveState() {
   }));
 }
 
-function showFeedback(message) {
-  elements.feedback.textContent = message;
-  window.clearTimeout(showFeedback.timeout);
-  showFeedback.timeout = window.setTimeout(() => {
-    elements.feedback.textContent = "";
-  }, 3600);
+function showFeedback(message, type = "info") {
+  const toast = document.createElement("div");
+  const closeButton = document.createElement("button");
+
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+
+  closeButton.className = "toast-close";
+  closeButton.type = "button";
+  closeButton.setAttribute("aria-label", "Fechar notificação");
+  closeButton.textContent = "X";
+  toast.append(closeButton);
+
+  while (elements.feedback.children.length >= 2) {
+    elements.feedback.firstElementChild.remove();
+  }
+
+  elements.feedback.append(toast);
+
+  const dismissToast = () => {
+    toast.classList.add("toast-hiding");
+    window.setTimeout(() => toast.remove(), 180);
+  };
+  const timeoutId = window.setTimeout(dismissToast, 4200);
+
+  closeButton.addEventListener("click", () => {
+    window.clearTimeout(timeoutId);
+    dismissToast();
+  });
 }
 
 function escapeHtml(value) {
