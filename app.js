@@ -237,9 +237,12 @@ function setExpenseSort(field) {
 }
 
 function populateCategories() {
-  elements.categoryInput.innerHTML = CATEGORIES.map((category) => (
-    `<option value="${escapeAttribute(category)}">${category}</option>`
-  )).join("");
+  elements.categoryInput.innerHTML = [
+    '<option value="" disabled selected>Selecione uma categoria</option>',
+    ...CATEGORIES.map((category) => (
+      `<option value="${escapeAttribute(category)}">${category}</option>`
+    )),
+  ].join("");
   elements.bulkCategoryInput.innerHTML = [
     '<option value="" disabled selected>Selecione uma categoria</option>',
     ...CATEGORIES.map((category) => (
@@ -254,7 +257,7 @@ function handleFormSubmit(event) {
   const expense = readFormExpense();
 
   if (!expense) {
-    showFeedback("Preencha nome do item e valor maior que zero.", "warning");
+    showFeedback("Preencha nome do item, categoria e valor maior que zero.", "warning");
     return;
   }
 
@@ -283,14 +286,15 @@ function handleFormSubmit(event) {
 function readFormExpense() {
   const value = parseMoneyInput(elements.valueInput.value);
   const name = elements.nameInput.value.trim();
+  const category = elements.categoryInput.value;
 
-  if (!name || !Number.isFinite(value) || value <= 0) {
+  if (!name || !category || !Number.isFinite(value) || value <= 0) {
     return null;
   }
 
   return {
     name,
-    category: elements.categoryInput.value,
+    category,
     value,
     description: elements.descriptionInput.value.trim(),
     month: state.selectedMonth,
@@ -322,7 +326,7 @@ function resetForm() {
   elements.expenseForm.reset();
   elements.expenseId.value = "";
   elements.valueInput.value = "";
-  elements.categoryInput.value = CATEGORIES[0];
+  elements.categoryInput.value = "";
   elements.formTitle.textContent = "Adicionar gasto";
   elements.submitButton.textContent = "Adicionar";
   updateFormSubmitState();

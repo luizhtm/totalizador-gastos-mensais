@@ -45,37 +45,51 @@
         <div class="site-brand">
           <img class="site-icon" src="assets/icon.svg" alt="" aria-hidden="true" width="48" height="48">
           <strong>Gastos Mensais</strong>
+          <a
+            class="github-link"
+            href="https://github.com/luizhtm/totalizador-gastos-mensais"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Abrir repositório do projeto no GitHub"
+            title="GitHub"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.68c-2.78.6-3.37-1.19-3.37-1.19-.46-1.16-1.12-1.47-1.12-1.47-.91-.62.07-.61.07-.61 1.01.07 1.54 1.04 1.54 1.04.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.98c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/>
+            </svg>
+          </a>
         </div>
 
-        <div class="theme-toggle" role="group" aria-label="Tema da aplicação">
-          <button type="button" data-theme-mode="auto" aria-pressed="true" aria-label="Usar tema automático">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <rect x="3" y="4" width="18" height="13" rx="2"/>
-              <path d="M9 21h6"/>
-              <path d="M12 17v4"/>
-            </svg>
-            <span>Auto</span>
-          </button>
-          <button type="button" data-theme-mode="light" aria-pressed="false" aria-label="Usar tema claro">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <circle cx="12" cy="12" r="4"/>
-              <path d="M12 2v2"/>
-              <path d="M12 20v2"/>
-              <path d="m4.93 4.93 1.41 1.41"/>
-              <path d="m17.66 17.66 1.41 1.41"/>
-              <path d="M2 12h2"/>
-              <path d="M20 12h2"/>
-              <path d="m6.34 17.66-1.41 1.41"/>
-              <path d="m19.07 4.93-1.41 1.41"/>
-            </svg>
-            <span>Claro</span>
-          </button>
-          <button type="button" data-theme-mode="dark" aria-pressed="false" aria-label="Usar tema escuro">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/>
-            </svg>
-            <span>Escuro</span>
-          </button>
+        <div class="site-header-actions">
+          <div class="theme-toggle" role="group" aria-label="Tema da aplicação">
+            <button type="button" data-theme-mode="auto" aria-pressed="true" aria-label="Usar tema automático">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="3" y="4" width="18" height="13" rx="2"/>
+                <path d="M9 21h6"/>
+                <path d="M12 17v4"/>
+              </svg>
+              <span>Auto</span>
+            </button>
+            <button type="button" data-theme-mode="light" aria-pressed="false" aria-label="Usar tema claro">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2"/>
+                <path d="M12 20v2"/>
+                <path d="m4.93 4.93 1.41 1.41"/>
+                <path d="m17.66 17.66 1.41 1.41"/>
+                <path d="M2 12h2"/>
+                <path d="M20 12h2"/>
+                <path d="m6.34 17.66-1.41 1.41"/>
+                <path d="m19.07 4.93-1.41 1.41"/>
+              </svg>
+              <span>Claro</span>
+            </button>
+            <button type="button" data-theme-mode="dark" aria-pressed="false" aria-label="Usar tema escuro">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/>
+              </svg>
+              <span>Escuro</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -106,10 +120,11 @@
         </div>
         <div>
           <h2>Privado por padrão</h2>
-          <p>Seus gastos ficam salvos apenas neste navegador. O app não envia dados para servidores nem exige cadastro para funcionar.</p>
+          <p>Seus gastos ficam salvos apenas localmente. O app é de código aberto, não envia dados para servidores nem exige cadastro para funcionar.</p>
         </div>
         <ul class="privacy-tags" aria-label="Destaques de privacidade">
           <li>Importação OFX</li>
+          <li>Código aberto</li>
           <li>Sem login</li>
           <li>Dados locais</li>
         </ul>
