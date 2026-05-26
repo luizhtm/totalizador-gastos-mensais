@@ -1,3 +1,5 @@
+import { OFX_CATEGORY_RULES } from "./ofx-category-rules.js";
+
 export const BACKUP_VERSION = 1;
 
 export const THEME_MODES = ["auto", "light", "dark"];
@@ -26,20 +28,6 @@ export const LEGACY_CATEGORY_NAMES = {
   Educacao: "Educação",
   Familia: "Família",
 };
-
-export const OFX_CATEGORY_RULES = [
-  { category: "Transporte", keywords: ["uber", "99", "taxi", "metro", "metrô", "onibus", "ônibus", "combustivel", "combustível", "posto"] },
-  { category: "Alimentação", keywords: ["ifood", "mercado", "market", "supermercado", "mercearia", "padaria", "restaurante", "cafe", "café"] },
-  { category: "Moradia", keywords: ["aluguel", "condominio", "condomínio"] },
-  { category: "Saúde", keywords: ["farmacia", "farmácia", "drogaria", "medico", "médico", "hospital", "clinica", "clínica"] },
-  { category: "Assinaturas", keywords: ["netflix", "spotify", "google", "apple", "assinatura", "prime", "disney", "hbo", "max"] },
-  { category: "Contas da casa", keywords: ["energia", "luz", "agua", "água", "internet", "telefone", "celular", "gas", "gás"] },
-  { category: "Educação", keywords: ["escola", "faculdade", "curso", "alura", "udemy", "educacao", "educação"] },
-  { category: "Compras", keywords: ["amazon", "mercado livre", "shopee", "compra", "magazine", "magalu"] },
-  { category: "Viagens", keywords: ["hotel", "airbnb", "booking", "passagem", "latam", "gol", "azul"] },
-  { category: "Cuidados pessoais", keywords: ["barbearia", "salao", "salão", "cabelo", "academia"] },
-  { category: "Pets", keywords: ["pet", "veterinario", "veterinário", "racao", "ração"] },
-];
 
 export function getCategoryTotals(expenses) {
   const totals = new Map();
