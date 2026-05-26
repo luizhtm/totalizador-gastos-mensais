@@ -1149,6 +1149,26 @@ dialog.expense-dialog article > .modal-heading {
   overflow-x: hidden;
 }
 
+.field-meta {
+  background: var(--app-surface-soft);
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  color: var(--app-text-muted);
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-left: 0.45rem;
+  padding: 0.22rem 0.42rem;
+  text-transform: uppercase;
+}
+
+.field-meta-required {
+  background: var(--app-accent-soft);
+  border-color: rgba(37, 99, 235, 0.28);
+  color: var(--app-total-text);
+}
+
 .modal-form textarea {
   min-height: 7rem;
 }

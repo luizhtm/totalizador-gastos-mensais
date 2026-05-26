@@ -117,8 +117,16 @@ function bindEvents() {
     openExpenseDialog();
   });
   elements.expenseForm.addEventListener("submit", handleFormSubmit);
-  elements.valueInput.addEventListener("input", maskValueInput);
-  elements.valueInput.addEventListener("blur", normalizeValueInput);
+  elements.expenseForm.addEventListener("input", updateFormSubmitState);
+  elements.expenseForm.addEventListener("change", updateFormSubmitState);
+  elements.valueInput.addEventListener("input", () => {
+    maskValueInput();
+    updateFormSubmitState();
+  });
+  elements.valueInput.addEventListener("blur", () => {
+    normalizeValueInput();
+    updateFormSubmitState();
+  });
   elements.cancelEditButton.addEventListener("click", closeExpenseDialog);
   elements.closeDialogButton.addEventListener("click", closeExpenseDialog);
   elements.expenseDialog.addEventListener("close", resetForm);
@@ -129,6 +137,7 @@ function bindEvents() {
   elements.importReviewBody.addEventListener("change", updateImportSelectionSummary);
   elements.confirmOfxImportButton.addEventListener("click", confirmOfxImport);
   elements.cancelOfxImportButton.addEventListener("click", clearImportReview);
+  elements.bulkCategoryInput.addEventListener("change", renderBulkCategoryActionState);
   elements.applyBulkCategoryButton.addEventListener("click", applyBulkCategory);
   elements.removeSelectedExpensesButton.addEventListener("click", removeSelectedExpenses);
   elements.selectAllRowsInput.addEventListener("change", () => {
@@ -231,9 +240,12 @@ function populateCategories() {
   elements.categoryInput.innerHTML = CATEGORIES.map((category) => (
     `<option value="${escapeAttribute(category)}">${category}</option>`
   )).join("");
-  elements.bulkCategoryInput.innerHTML = CATEGORIES.map((category) => (
-    `<option value="${escapeAttribute(category)}">${category}</option>`
-  )).join("");
+  elements.bulkCategoryInput.innerHTML = [
+    '<option value="" disabled selected>Selecione uma categoria</option>',
+    ...CATEGORIES.map((category) => (
+      `<option value="${escapeAttribute(category)}">${category}</option>`
+    )),
+  ].join("");
 }
 
 function handleFormSubmit(event) {
@@ -242,7 +254,7 @@ function handleFormSubmit(event) {
   const expense = readFormExpense();
 
   if (!expense) {
-    showFeedback("Informe um valor maior que zero.", "warning");
+    showFeedback("Preencha nome do item e valor maior que zero.", "warning");
     return;
   }
 
@@ -270,13 +282,14 @@ function handleFormSubmit(event) {
 
 function readFormExpense() {
   const value = parseMoneyInput(elements.valueInput.value);
+  const name = elements.nameInput.value.trim();
 
-  if (!Number.isFinite(value) || value <= 0) {
+  if (!name || !Number.isFinite(value) || value <= 0) {
     return null;
   }
 
   return {
-    name: elements.nameInput.value.trim(),
+    name,
     category: elements.categoryInput.value,
     value,
     description: elements.descriptionInput.value.trim(),
@@ -299,9 +312,9 @@ function startEdit(id) {
   elements.valueInput.value = formatMoneyInput(expense.value);
   elements.descriptionInput.value = expense.description || "";
   elements.formTitle.textContent = "Editar gasto";
-  elements.submitButton.textContent = "Salvar alteracoes";
+  elements.submitButton.textContent = "Salvar alterações";
+  updateFormSubmitState();
   openExpenseDialog();
-  elements.nameInput.focus();
   render();
 }
 
@@ -312,6 +325,7 @@ function resetForm() {
   elements.categoryInput.value = CATEGORIES[0];
   elements.formTitle.textContent = "Adicionar gasto";
   elements.submitButton.textContent = "Adicionar";
+  updateFormSubmitState();
 }
 
 function maskValueInput() {
@@ -324,6 +338,38 @@ function normalizeValueInput() {
   elements.valueInput.value = Number.isFinite(value) && value > 0
     ? formatMoneyInput(value)
     : "";
+}
+
+function updateFormSubmitState() {
+  const draft = readFormExpense();
+
+  if (!draft) {
+    elements.submitButton.disabled = true;
+    return;
+  }
+
+  const editingId = elements.expenseId.value;
+
+  if (!editingId) {
+    elements.submitButton.disabled = false;
+    return;
+  }
+
+  const originalExpense = state.expenses.find((expense) => expense.id === editingId);
+
+  if (!originalExpense) {
+    elements.submitButton.disabled = true;
+    return;
+  }
+
+  elements.submitButton.disabled = !hasExpenseChanged(originalExpense, draft);
+}
+
+function hasExpenseChanged(originalExpense, draft) {
+  return originalExpense.name !== draft.name
+    || originalExpense.category !== draft.category
+    || originalExpense.value !== draft.value
+    || (originalExpense.description || "") !== draft.description;
 }
 
 function openExpenseDialog() {
@@ -401,6 +447,11 @@ function applyBulkCategory() {
     return;
   }
 
+  if (!category) {
+    showFeedback("Selecione uma categoria para alterar os gastos.", "warning");
+    return;
+  }
+
   const shouldApply = window.confirm(
     `Alterar ${selectedIds.length} gastos selecionados para a categoria "${category}"?`
   );
@@ -412,6 +463,7 @@ function applyBulkCategory() {
   state.expenses = updateExpenseCategoryByIds(state.expenses, selectedIds, category);
   saveState();
   clearExpenseSelection();
+  elements.bulkCategoryInput.value = "";
   resetForm();
   render();
   showFeedback(`${selectedIds.length} gastos atualizados.`, "success");
@@ -465,6 +517,9 @@ function renderBulkActions(monthExpenses) {
   elements.bulkActionBar.hidden = !hasSelection;
   elements.bulkActionBar.classList.toggle("bulk-action-bar-sticky", hasSelection);
   elements.feedback.classList.toggle("toast-region-raised", hasSelection);
+  if (!hasSelection) {
+    elements.bulkCategoryInput.value = "";
+  }
   elements.bulkSelectionSummary.hidden = !hasSelection;
   elements.bulkCategoryInput.hidden = !hasSelection;
   elements.applyBulkCategoryButton.hidden = !hasSelection;
@@ -482,6 +537,11 @@ function renderBulkActions(monthExpenses) {
   elements.mobileSelectAllLabel.textContent = allSelected
     ? "Todos selecionados"
     : hasSelection ? "Alguns selecionados" : "Selecionar todos";
+  renderBulkCategoryActionState();
+}
+
+function renderBulkCategoryActionState() {
+  elements.applyBulkCategoryButton.disabled = !elements.bulkCategoryInput.value;
 }
 
 function renderMonthOptions() {

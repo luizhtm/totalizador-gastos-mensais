@@ -301,6 +301,7 @@
 
             <label for="nameInput">
               Nome do item
+              <span class="field-meta field-meta-required">Obrigatório</span>
               <input
                 id="nameInput"
                 name="name"
@@ -314,11 +315,13 @@
             <div class="form-row">
               <label for="categoryInput">
                 Categoria
+                <span class="field-meta field-meta-required">Obrigatória</span>
                 <select id="categoryInput" name="category" required></select>
               </label>
 
               <label for="valueInput">
                 Valor
+                <span class="field-meta field-meta-required">Obrigatório</span>
                 <input
                   id="valueInput"
                   name="value"
@@ -333,6 +336,7 @@
 
             <label for="descriptionInput">
               Descrição
+              <span class="field-meta">Opcional</span>
               <textarea
                 id="descriptionInput"
                 name="description"
@@ -342,7 +346,7 @@
             </label>
 
             <footer class="form-actions">
-              <button id="submitButton" type="submit">Adicionar</button>
+              <button id="submitButton" type="submit" disabled>Adicionar</button>
               <button id="cancelEditButton" class="secondary" type="button">
                 Cancelar
               </button>
