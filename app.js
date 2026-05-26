@@ -100,6 +100,19 @@ function init() {
   renderMonthOptions();
   bindEvents();
   render();
+  registerServiceWorker();
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || !window.isSecureContext) {
+    return;
+  }
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {
+      // Offline support is optional; the app remains usable as a normal static page.
+    });
+  });
 }
 
 function bindEvents() {

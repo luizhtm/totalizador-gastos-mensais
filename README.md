@@ -5,7 +5,7 @@ Aplicação estática para registrar, importar e totalizar gastos mensais direta
 ## Stack
 
 - HTML, CSS e JavaScript sem etapa de build obrigatória
-- [Pico CSS](https://picocss.com/) via CDN
+- [Pico CSS](https://picocss.com/) servido localmente em `vendor/pico/pico.min.css`
 - Persistência em `localStorage`
 - Testes com `node:test`
 - Especificações com OpenSpec
@@ -60,6 +60,10 @@ Valide as especificações:
 ```bash
 openspec validate --all --strict --no-interactive
 ```
+
+## PWA
+
+O app registra `service-worker.js` para cache offline dos arquivos estáticos principais. Ao alterar arquivos incluídos no app shell cacheado, atualize `APP_CACHE_VERSION` em `service-worker.js` e os query params de versão usados em `index.html`.
 
 ## Deploy
 
