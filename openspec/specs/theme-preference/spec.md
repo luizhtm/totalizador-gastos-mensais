@@ -74,6 +74,13 @@ The application SHALL remember the user's selected theme mode in the current bro
 - **THEN** the application SHALL restore the saved theme mode
 - **AND** apply the corresponding active theme
 
+#### Scenario: Applying theme before first paint
+
+- **GIVEN** the user previously selected dark mode
+- **WHEN** the user reloads or revisits the application
+- **THEN** the application SHALL apply the dark theme during initial document loading
+- **AND** avoid briefly presenting the light theme before the main script finishes loading
+
 #### Scenario: Local-only preference
 
 - **GIVEN** the user selected a theme mode

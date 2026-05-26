@@ -1282,7 +1282,7 @@ dialog.expense-dialog article > .modal-heading {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1279px) {
   .theme-toggle {
     flex: 0 0 auto;
     max-width: max-content;
@@ -1302,7 +1302,7 @@ dialog.expense-dialog article > .modal-heading {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1279px) {
   .toast-region {
     align-items: center;
     bottom: 0.85rem;
@@ -1482,7 +1482,7 @@ dialog.expense-dialog article > .modal-heading {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1279px) {
   .app-shell {
     padding-block: 1.5rem;
   }

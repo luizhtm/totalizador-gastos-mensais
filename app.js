@@ -117,8 +117,9 @@ function bindEvents() {
     openExpenseDialog();
   });
   elements.expenseForm.addEventListener("submit", handleFormSubmit);
-  elements.expenseForm.addEventListener("input", updateFormSubmitState);
-  elements.expenseForm.addEventListener("change", updateFormSubmitState);
+  elements.nameInput.addEventListener("input", updateFormSubmitState);
+  elements.categoryInput.addEventListener("change", updateFormSubmitState);
+  elements.descriptionInput.addEventListener("input", updateFormSubmitState);
   elements.valueInput.addEventListener("input", () => {
     maskValueInput();
     updateFormSubmitState();
@@ -133,8 +134,8 @@ function bindEvents() {
   elements.exportButton.addEventListener("click", exportBackup);
   elements.importInput.addEventListener("change", importBackup);
   elements.ofxInput.addEventListener("change", handleOfxImportFile);
-  elements.importReviewBody.addEventListener("input", updateImportSelectionSummary);
-  elements.importReviewBody.addEventListener("change", updateImportSelectionSummary);
+  elements.importReviewBody.addEventListener("input", handleImportReviewSummaryChange);
+  elements.importReviewBody.addEventListener("change", handleImportReviewSummaryChange);
   elements.confirmOfxImportButton.addEventListener("click", confirmOfxImport);
   elements.cancelOfxImportButton.addEventListener("click", clearImportReview);
   elements.bulkCategoryInput.addEventListener("change", renderBulkCategoryActionState);
@@ -802,6 +803,14 @@ function updateImportSelectionSummary(precomputedSelectedDrafts) {
 
   elements.importSelectedSummary.textContent = `${selectedDrafts.length} selecionados - ${formatCurrency(selectedTotal)}`;
   elements.confirmOfxImportButton.disabled = selectedDrafts.length === 0;
+}
+
+function handleImportReviewSummaryChange(event) {
+  const field = event.target.closest("[data-import-field]")?.dataset.importField;
+
+  if (["name", "selected", "value"].includes(field)) {
+    updateImportSelectionSummary();
+  }
 }
 
 function readSelectedImportDrafts({ allowInvalid } = { allowInvalid: false }) {
