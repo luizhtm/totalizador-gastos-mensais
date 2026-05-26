@@ -15,7 +15,9 @@ The application SHALL allow the user to add an expense for the selected month.
 - **GIVEN** the user is viewing the main screen
 - **WHEN** the user chooses to add an expense
 - **THEN** the application SHALL open a modal form
-- **AND** the form SHALL start empty with the default category selected
+- **AND** the form SHALL start empty
+- **AND** the category field SHALL show a `Selecione uma categoria` placeholder without selecting a category
+- **AND** the primary action SHALL be disabled until required fields are valid
 
 #### Scenario: Saving a new expense
 
@@ -26,12 +28,12 @@ The application SHALL allow the user to add an expense for the selected month.
 - **AND** close the modal
 - **AND** update all monthly summaries and lists
 
-#### Scenario: Rejecting invalid value
+#### Scenario: Rejecting missing required data
 
 - **GIVEN** the expense modal is open
-- **WHEN** the user submits a value that is not greater than zero
+- **WHEN** the user submits without a name, a fixed category, or a value greater than zero
 - **THEN** the application SHALL reject the expense
-- **AND** show feedback explaining that the value must be greater than zero
+- **AND** show feedback explaining that name, category, and positive value are required
 
 ### Requirement: Edit Expense
 
@@ -44,6 +46,7 @@ The application SHALL allow the user to edit an existing expense using the same 
 - **THEN** the application SHALL open the modal form
 - **AND** populate it with the existing expense data
 - **AND** change the primary action label to save changes
+- **AND** keep the primary action disabled until at least one field is changed
 
 #### Scenario: Saving edits
 
@@ -53,6 +56,12 @@ The application SHALL allow the user to edit an existing expense using the same 
 - **AND** keep the same expense identity
 - **AND** close the modal
 - **AND** update all monthly summaries and lists
+
+#### Scenario: Reverting edits disables saving
+
+- **GIVEN** the user is editing an existing expense
+- **WHEN** the user changes a field and then restores every field to its original value
+- **THEN** the save changes action SHALL be disabled
 
 ### Requirement: Remove Expense
 
@@ -194,6 +203,13 @@ The application SHALL allow the user to update the category of all selected expe
 - **AND** preserve each selected expense's item name, description, value, date, identity, and source metadata
 - **AND** update all monthly summaries, category summaries, and the expense list
 - **AND** clear the current selection
+
+#### Scenario: Waiting for a bulk category selection
+
+- **GIVEN** one or more expenses are selected
+- **WHEN** the bulk action bar is shown
+- **THEN** the bulk category field SHALL show a `Selecione uma categoria` placeholder without selecting a category
+- **AND** the bulk category edit action SHALL be disabled until a fixed category is selected
 
 #### Scenario: Cancelling category edit
 

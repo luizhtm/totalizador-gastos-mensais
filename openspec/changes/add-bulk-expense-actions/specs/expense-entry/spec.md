@@ -78,6 +78,13 @@ The application SHALL allow the user to update the category of all selected expe
 - **AND** update all monthly summaries, category summaries, and the expense list
 - **AND** clear the current selection
 
+#### Scenario: Waiting for a bulk category selection
+
+- **GIVEN** one or more expenses are selected
+- **WHEN** the bulk action bar is shown
+- **THEN** the bulk category field SHALL show a `Selecione uma categoria` placeholder without selecting a category
+- **AND** the bulk category edit action SHALL be disabled until a fixed category is selected
+
 #### Scenario: Cancelling category edit
 
 - **GIVEN** one or more expenses are selected
