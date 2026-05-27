@@ -132,9 +132,12 @@ function bindEvents() {
     openExpenseDialog();
   });
   elements.expenseForm.addEventListener("submit", handleFormSubmit);
+  elements.nameInput.addEventListener("keydown", handleNameInputKeydown);
   elements.nameInput.addEventListener("input", updateFormSubmitState);
   elements.categoryInput.addEventListener("change", updateFormSubmitState);
+  elements.descriptionInput.addEventListener("keydown", handleDescriptionInputKeydown);
   elements.descriptionInput.addEventListener("input", updateFormSubmitState);
+  elements.valueInput.addEventListener("keydown", handleValueInputKeydown);
   elements.valueInput.addEventListener("input", () => {
     maskValueInput();
     updateFormSubmitState();
@@ -220,6 +223,54 @@ function bindEvents() {
     state.installPromptEvent = null;
     renderInstallAppButton();
   });
+}
+
+function handleNameInputKeydown(event) {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  event.preventDefault();
+  elements.categoryInput.focus();
+}
+
+function handleValueInputKeydown(event) {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  event.preventDefault();
+  normalizeValueInput();
+  updateFormSubmitState();
+
+  if (!elements.nameInput.value.trim()) {
+    elements.nameInput.focus();
+    return;
+  }
+
+  if (!elements.categoryInput.value) {
+    elements.categoryInput.focus();
+    return;
+  }
+
+  if (!elements.valueInput.value || elements.submitButton.disabled) {
+    elements.descriptionInput.focus();
+    return;
+  }
+
+  elements.expenseForm.requestSubmit();
+}
+
+function handleDescriptionInputKeydown(event) {
+  if (event.key !== "Enter" || (!event.ctrlKey && !event.metaKey)) {
+    return;
+  }
+
+  event.preventDefault();
+
+  if (!elements.submitButton.disabled) {
+    elements.expenseForm.requestSubmit();
+  }
 }
 
 async function installApp() {
