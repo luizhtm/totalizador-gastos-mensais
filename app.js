@@ -698,8 +698,8 @@ function renderExpenseTable(expenses) {
         <span class="item-title">${escapeHtml(expense.name)}</span>
         ${expense.description ? `<span class="item-description">${escapeHtml(expense.description)}</span>` : ""}
       </td>
-      <td data-label="Categoria">${escapeHtml(expense.category)}</td>
-      <td class="numeric" data-label="Valor">${formatCurrency(expense.value)}</td>
+      <td class="category-cell" data-label="Categoria">${escapeHtml(expense.category)}</td>
+      <td class="numeric value-cell" data-label="Valor">${formatCurrency(expense.value)}</td>
       <td class="actions-cell" data-label="Ações">
         <div class="row-actions">
           <button class="secondary icon-action icon-action-edit" type="button" data-action="edit" data-id="${expense.id}" ${hasSelection ? "disabled" : ""} title="${hasSelection ? disabledEditTitle : `Editar gasto ${escapeAttribute(expense.name)}`}" aria-label="${hasSelection ? disabledEditTitle : `Editar gasto ${escapeAttribute(expense.name)}`}">
