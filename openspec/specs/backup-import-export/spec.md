@@ -14,7 +14,8 @@ The application SHALL allow the user to export all saved expense data as a JSON 
 
 - **GIVEN** the user has any current local data state
 - **WHEN** the user chooses to export data
-- **THEN** the application SHALL download a file named `gastos.gastos.json`
+- **THEN** the application SHALL download a file named `{timestamp}.gastos.json`
+- **AND** the timestamp SHALL be derived from the export time in a filesystem-safe ISO-like format
 - **AND** the file SHALL contain JSON
 - **AND** include app identifier, backup version, export timestamp, selected month, months list, and expenses list
 

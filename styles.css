@@ -178,18 +178,32 @@ button,
 }
 
 .github-link {
+  --pico-background-color: transparent;
+  --pico-border-color: transparent;
+  --pico-color: var(--app-text-muted);
+  --pico-box-shadow: none;
   align-items: center;
-  background: transparent;
-  border: 1px solid transparent;
+  appearance: none;
+  background: transparent !important;
+  border: 1px solid transparent !important;
   border-radius: 999px;
   color: var(--app-text-muted);
+  cursor: pointer;
   display: inline-flex;
   flex: 0 0 auto;
   height: 2.35rem;
   justify-content: center;
+  margin: 0;
+  min-height: 0;
+  outline: none;
+  padding: 0 !important;
   text-decoration: none;
   transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
   width: 2.35rem;
+}
+
+.github-link[hidden] {
+  display: none;
 }
 
 .github-link:hover,
@@ -1373,6 +1387,54 @@ dialog.expense-dialog article > .modal-heading {
 
   .theme-toggle span {
     display: none;
+  }
+
+  @media (max-width: 380px) {
+    .site-header-inner {
+      gap: 0.5rem;
+    }
+
+    .site-brand {
+      gap: 0.5rem;
+    }
+
+    .site-header-inner strong {
+      font-size: 0.9rem;
+      line-height: 1.1;
+    }
+
+    .site-icon {
+      border-radius: 0.6rem;
+      height: 36px;
+      width: 36px;
+    }
+
+    .site-header-actions {
+      gap: 0.25rem;
+    }
+
+    .github-link {
+      height: 1.85rem;
+      width: 1.85rem;
+    }
+
+    .github-link svg {
+      height: 0.95rem;
+      width: 0.95rem;
+    }
+
+    .theme-toggle {
+      gap: 0.05rem;
+      padding: 0.1rem;
+    }
+
+    .theme-toggle button {
+      border-radius: 0.65rem;
+      height: 1.75rem;
+      min-height: 1.75rem;
+      padding: 0.35rem;
+      width: 1.75rem;
+    }
   }
 
   .form-row,

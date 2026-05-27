@@ -27,6 +27,19 @@ The application SHALL provide install metadata for browsers that support Progres
 - **THEN** the application SHALL open within the configured app scope
 - **AND** preserve the same local data behavior as the browser version
 
+#### Scenario: Native install action
+
+- **GIVEN** the browser reports that native PWA installation is available
+- **WHEN** the application is loaded
+- **THEN** the header SHALL expose a compact install action
+- **AND** activating the action SHALL trigger the browser-native install prompt
+
+#### Scenario: Install action unavailable
+
+- **GIVEN** the browser does not report that native PWA installation is available
+- **WHEN** the application is loaded
+- **THEN** the header SHALL NOT show the install action
+
 ### Requirement: Service Worker Registration
 
 The application SHALL register a Service Worker when the browser supports Service Workers.

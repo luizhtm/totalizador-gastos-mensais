@@ -27,13 +27,14 @@ import {
 
 const STORAGE_KEY = "totalizador-gastos:v1";
 const THEME_STORAGE_KEY = "totalizador-gastos:theme-mode";
-const BACKUP_FILENAME = "gastos.gastos.json";
+const BACKUP_FILE_EXTENSION = ".gastos.json";
 
 const state = {
   expenses: [],
   selectedMonth: getCurrentMonth(),
   importDrafts: [],
   themeMode: "auto",
+  installPromptEvent: null,
   expenseSort: {
     field: "name",
     direction: "asc",
@@ -59,6 +60,7 @@ const elements = {
   expenseCount: document.querySelector("#expenseCount"),
   topCategory: document.querySelector("#topCategory"),
   feedback: document.querySelector("#feedback"),
+  installAppButton: document.querySelector("#installAppButton"),
   categorySummary: document.querySelector("#categorySummary"),
   categorySummaryHint: document.querySelector("#categorySummaryHint"),
   expenseListHint: document.querySelector("#expenseListHint"),
@@ -160,6 +162,7 @@ function bindEvents() {
   elements.mobileSelectAllRowsInput.addEventListener("change", () => {
     setAllExpensesSelection(elements.mobileSelectAllRowsInput.checked);
   });
+  elements.installAppButton.addEventListener("click", installApp);
   for (const button of elements.themeModeButtons) {
     button.addEventListener("click", () => {
       setThemeMode(button.dataset.themeMode);
@@ -208,6 +211,33 @@ function bindEvents() {
 
     setExpenseSelection(checkbox.dataset.id, checkbox.checked);
   });
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    state.installPromptEvent = event;
+    renderInstallAppButton();
+  });
+  window.addEventListener("appinstalled", () => {
+    state.installPromptEvent = null;
+    renderInstallAppButton();
+  });
+}
+
+async function installApp() {
+  if (!state.installPromptEvent) {
+    return;
+  }
+
+  const promptEvent = state.installPromptEvent;
+  state.installPromptEvent = null;
+  renderInstallAppButton();
+
+  await promptEvent.prompt();
+  await promptEvent.userChoice.catch(() => null);
+}
+
+function renderInstallAppButton() {
+  const isStandalone = window.matchMedia?.("(display-mode: standalone)")?.matches || false;
+  elements.installAppButton.hidden = isStandalone || !state.installPromptEvent;
 }
 
 function setThemeMode(mode) {
@@ -700,11 +730,12 @@ function getSelectedMonthExpenses() {
 }
 
 function exportBackup() {
+  const exportedAt = new Date();
   const months = [...new Set(state.expenses.map((expense) => expense.month))].sort();
   const payload = {
     app: "totalizador-gastos-mensais",
     version: BACKUP_VERSION,
-    exportedAt: new Date().toISOString(),
+    exportedAt: exportedAt.toISOString(),
     selectedMonth: state.selectedMonth,
     months,
     expenses: state.expenses,
@@ -716,10 +747,16 @@ function exportBackup() {
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = BACKUP_FILENAME;
+  link.download = `${formatBackupTimestamp(exportedAt)}${BACKUP_FILE_EXTENSION}`;
   link.click();
   URL.revokeObjectURL(url);
   showFeedback("Arquivo de backup gerado.", "success");
+}
+
+function formatBackupTimestamp(date) {
+  return date.toISOString()
+    .replace(/\.\d{3}Z$/, "Z")
+    .replace(/[:]/g, "-");
 }
 
 async function handleOfxImportFile(event) {

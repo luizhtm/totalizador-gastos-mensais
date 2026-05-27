@@ -18,6 +18,7 @@
 - [x] Ensure the app can load from the GitHub Pages repository path.
 - [x] Keep the app usable when Service Worker registration fails or is unsupported.
 - [x] Update the manifest with installable PNG icons and stable app identity.
+- [x] Add a compact header install action that appears only when native PWA installation is available.
 - [x] Avoid breaking local development over `localhost` or `127.0.0.1`.
 
 ## Validation

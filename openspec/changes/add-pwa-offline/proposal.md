@@ -14,6 +14,7 @@ The application already runs fully in the browser and stores user data locally. 
 - Cache the application shell and local static assets needed to open the app offline.
 - Serve core CSS dependencies from repository-local static files instead of relying on a CDN at runtime.
 - Keep the existing local-first data model unchanged.
+- Expose a small install action only when the browser reports that native PWA installation is available.
 - Preserve GitHub Pages compatibility, including repository subpath deployment.
 - Keep the app functional when Service Workers are unsupported.
 - Ensure updates to deployed assets can replace older cached versions.
@@ -25,7 +26,7 @@ The application already runs fully in the browser and stores user data locally. 
 - Server-side storage or login.
 - Offline parsing of files that were not selected locally by the user.
 - Complex runtime caching for arbitrary third-party resources beyond what is required for the app shell.
-- Custom install prompts or onboarding flows.
+- Custom install onboarding flows beyond triggering the browser-native install prompt.
 
 ## Decisions
 
