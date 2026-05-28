@@ -35,6 +35,16 @@ The application SHALL allow the user to add an expense for the selected month.
 - **THEN** the application SHALL reject the expense
 - **AND** show feedback explaining that name, category, and positive value are required
 
+#### Scenario: Keyboard-assisted form navigation
+
+- **GIVEN** the expense modal is open
+- **WHEN** the user presses Enter in the item name field
+- **THEN** the application SHALL move focus to the category field
+- **WHEN** the user presses Enter in the value field after required fields are valid
+- **THEN** the application SHALL submit the form
+- **AND** pressing Enter in the description field SHALL preserve normal multiline text entry
+- **AND** pressing Ctrl+Enter or Command+Enter in the description field SHALL submit the form when the primary action is enabled
+
 ### Requirement: Edit Expense
 
 The application SHALL allow the user to edit an existing expense using the same modal form.
