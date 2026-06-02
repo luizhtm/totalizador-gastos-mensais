@@ -5,7 +5,9 @@ import {
   createOfxDrafts,
   formatMoneyInput,
   getCategoryTotals,
+  getCurrentDate,
   getTopCategory,
+  isValidDate,
   maskMoneyInputValue,
   mergeExpenses,
   normalizeCategoryName,
@@ -84,6 +86,22 @@ test("sorts expenses by item, category, and value", () => {
     "iFood",
     "Uber",
   ]);
+
+  const datedExpenses = [
+    { name: "C", date: "2026-06-15", category: "A", value: 1 },
+    { name: "A", date: "2026-06-01", category: "B", value: 2 },
+    { name: "B", date: undefined, category: "C", value: 3 },
+    { name: "D", date: "2026-06-10", category: "D", value: 4 },
+  ];
+
+  assert.deepEqual(
+    sortExpenses(datedExpenses, { field: "date", direction: "asc" }).map((e) => e.name + ":" + (e.date || "—")),
+    ["A:2026-06-01", "D:2026-06-10", "C:2026-06-15", "B:—"],
+  );
+  assert.deepEqual(
+    sortExpenses(datedExpenses, { field: "date", direction: "desc" }).map((e) => e.name + ":" + (e.date || "—")),
+    ["C:2026-06-15", "D:2026-06-10", "A:2026-06-01", "B:—"],
+  );
 });
 
 test("updates categories and removes expenses by selected ids", () => {
@@ -140,6 +158,7 @@ test("parses OFX transactions and creates expense drafts only for negative amoun
   assert.equal(drafts[0].value, 103.38);
   assert.equal(drafts[0].category, "Alimentação");
   assert.equal(drafts[0].selected, true);
+  assert.equal(drafts[0].date, "2026-05-04");
 });
 
 test("detects duplicated OFX drafts by source id", () => {
@@ -181,6 +200,47 @@ test("validates backup payloads and normalizes imported data", () => {
   assert.equal(expenses[0].category, "Alimentação");
   assert.equal(expenses[0].month, "2026-05");
   assert.throws(() => validateBackup({ app: "outro", version: 1, expenses: [] }));
+});
+
+test("normalizes dates and checks date utilities", () => {
+  const today = getCurrentDate();
+
+  assert.match(today, /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(isValidDate(today), true);
+  assert.equal(isValidDate("2026-05-04"), true);
+  assert.equal(isValidDate("2026-5-4"), false);
+  assert.equal(isValidDate("20260504"), false);
+  assert.equal(isValidDate(""), false);
+  assert.equal(isValidDate(undefined), false);
+
+  const withDate = normalizeStoredExpense({
+    id: "1", name: "Teste", category: "Outros", value: 10, date: "2026-05-04",
+  });
+  assert.equal(withDate.date, "2026-05-04");
+
+  const withoutDate = normalizeStoredExpense({
+    id: "2", name: "Teste", category: "Outros", value: 10,
+  });
+  assert.equal(withoutDate.date, undefined);
+
+  const invalidDate = normalizeStoredExpense({
+    id: "3", name: "Teste", category: "Outros", value: 10, date: "invalido",
+  });
+  assert.equal(invalidDate.date, undefined);
+
+  const imported = validateBackup({
+    app: "totalizador-gastos-mensais",
+    version: 1,
+    expenses: [{ name: "Mercado", category: "Outros", value: "50", date: "2026-05-04" }],
+  }, () => "id-1", "2026-05");
+  assert.equal(imported[0].date, "2026-05-04");
+
+  const importedNoDate = validateBackup({
+    app: "totalizador-gastos-mensais",
+    version: 1,
+    expenses: [{ name: "Mercado", category: "Outros", value: "50" }],
+  }, () => "id-2", "2026-05");
+  assert.equal(importedNoDate[0].date, undefined);
 });
 
 test("normalizes stored expenses and merges backups by id", () => {

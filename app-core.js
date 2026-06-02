@@ -68,9 +68,25 @@ export function resolveThemeMode(mode, systemPrefersDark) {
 }
 
 export function sortExpenses(expenses, sort = { field: "name", direction: "asc" }) {
-  const field = ["name", "category", "value"].includes(sort.field) ? sort.field : "name";
+  const field = ["name", "category", "value", "date"].includes(sort.field) ? sort.field : "name";
   const direction = sort.direction === "desc" ? "desc" : "asc";
   const directionFactor = direction === "desc" ? -1 : 1;
+
+  if (field === "date") {
+    const withDate = [];
+    const withoutDate = [];
+
+    for (const expense of expenses) {
+      (expense.date ? withDate : withoutDate).push(expense);
+    }
+
+    withDate.sort((a, b) => {
+      const comparison = compareExpenseField(a, b, "date");
+      return comparison * directionFactor;
+    });
+
+    return [...withDate, ...withoutDate];
+  }
 
   return [...expenses].sort((a, b) => {
     const primaryComparison = compareExpenseField(a, b, field);
@@ -108,6 +124,10 @@ export function removeExpensesByIds(expenses, ids) {
 function compareExpenseField(a, b, field) {
   if (field === "value") {
     return a.value - b.value;
+  }
+
+  if (field === "date") {
+    return (a.date || "").localeCompare(b.date || "");
   }
 
   return String(a[field] || "").localeCompare(String(b[field] || ""), "pt-BR", {
@@ -284,6 +304,8 @@ export function normalizeImportedExpense(expense, createId = randomId, currentMo
     throw new Error("O arquivo possui gastos com dados inválidos.");
   }
 
+  const date = isValidDate(expense.date) ? expense.date : undefined;
+
   return {
     id: expense.id || createId(),
     name,
@@ -291,6 +313,7 @@ export function normalizeImportedExpense(expense, createId = randomId, currentMo
     value,
     description: String(expense.description || "").trim(),
     month,
+    date,
     createdAt: expense.createdAt || new Date().toISOString(),
     source: expense.source || undefined,
     sourceId: expense.sourceId || undefined,
@@ -306,6 +329,8 @@ export function normalizeStoredExpense(expense, currentMonth = getCurrentMonth()
     return null;
   }
 
+  const date = isValidDate(expense.date) ? expense.date : undefined;
+
   return {
     id: String(expense.id),
     name: String(expense.name),
@@ -313,6 +338,7 @@ export function normalizeStoredExpense(expense, currentMonth = getCurrentMonth()
     value,
     description: String(expense.description || ""),
     month: isValidMonth(expense.month) ? expense.month : currentMonth,
+    date,
     createdAt: expense.createdAt || new Date().toISOString(),
     source: expense.source || undefined,
     sourceId: expense.sourceId || undefined,
@@ -351,6 +377,19 @@ export function getCurrentMonth() {
 
 export function isValidMonth(value) {
   return typeof value === "string" && /^\d{4}-\d{2}$/.test(value);
+}
+
+export function getCurrentDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+export function isValidDate(value) {
+  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
 }
 
 export function formatMonthLabel(value) {

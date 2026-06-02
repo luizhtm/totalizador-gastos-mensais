@@ -260,6 +260,7 @@
                 <option value="name">Item</option>
                 <option value="category">Categoria</option>
                 <option value="value">Valor</option>
+                <option value="date">Data</option>
               </select>
             </label>
             <button id="expenseSortDirectionButton" class="secondary" type="button">
@@ -280,6 +281,12 @@
                     <button class="table-sort-button" type="button" data-sort-field="name" aria-pressed="true">
                       <span>Item</span>
                       <span class="sort-icon" data-sort-indicator aria-hidden="true">↑</span>
+                    </button>
+                  </th>
+                  <th class="date-cell" aria-sort="none">
+                    <button class="table-sort-button" type="button" data-sort-field="date" aria-pressed="false">
+                      <span>Data</span>
+                      <span class="sort-icon" data-sort-indicator aria-hidden="true">↕</span>
                     </button>
                   </th>
                   <th aria-sort="none">
@@ -384,6 +391,17 @@
                 >
               </label>
             </div>
+
+            <label for="dateInput">
+              Data
+              <span class="field-meta field-meta-readonly">Somente leitura</span>
+              <input
+                id="dateInput"
+                name="date"
+                type="date"
+                disabled
+              >
+            </label>
 
             <label for="descriptionInput">
               Descrição

@@ -7,9 +7,11 @@ import {
   formatMonthLabel,
   formatPercent,
   getCategoryTotals,
+  getCurrentDate,
   getCurrentMonth,
   getExistingImportKeys,
   getTopCategory,
+  isValidDate,
   isValidMonth,
   maskMoneyInputValue,
   mergeExpenses,
@@ -51,6 +53,7 @@ const elements = {
   nameInput: document.querySelector("#nameInput"),
   categoryInput: document.querySelector("#categoryInput"),
   valueInput: document.querySelector("#valueInput"),
+  dateInput: document.querySelector("#dateInput"),
   descriptionInput: document.querySelector("#descriptionInput"),
   formTitle: document.querySelector("#formTitle"),
   submitButton: document.querySelector("#submitButton"),
@@ -317,7 +320,7 @@ function applyThemeMode() {
 }
 
 function setExpenseSort(field) {
-  if (!["name", "category", "value"].includes(field)) {
+  if (!["name", "category", "value", "date"].includes(field)) {
     return;
   }
 
@@ -387,10 +390,13 @@ function readFormExpense() {
     return null;
   }
 
+  const date = isValidDate(elements.dateInput.value) ? elements.dateInput.value : getCurrentDate();
+
   return {
     name,
     category,
     value,
+    date,
     description: elements.descriptionInput.value.trim(),
     month: state.selectedMonth,
   };
@@ -409,6 +415,7 @@ function startEdit(id) {
   elements.nameInput.value = expense.name;
   elements.categoryInput.value = expense.category;
   elements.valueInput.value = formatMoneyInput(expense.value);
+  elements.dateInput.value = isValidDate(expense.date) ? expense.date : "";
   elements.descriptionInput.value = expense.description || "";
   elements.formTitle.textContent = "Editar gasto";
   elements.submitButton.textContent = "Salvar alterações";
@@ -422,6 +429,7 @@ function resetForm() {
   elements.expenseId.value = "";
   elements.valueInput.value = "";
   elements.categoryInput.value = "";
+  elements.dateInput.value = getCurrentDate();
   elements.formTitle.textContent = "Adicionar gasto";
   elements.submitButton.textContent = "Adicionar";
   updateFormSubmitState();
@@ -727,7 +735,7 @@ function renderExpenseTable(expenses) {
   if (!hasRows) {
     elements.expenseTableBody.innerHTML = `
       <tr>
-        <td class="empty-state" colspan="5">Adicione o primeiro gasto para este mês.</td>
+        <td class="empty-state" colspan="6">Adicione o primeiro gasto para este mês.</td>
       </tr>
     `;
     return;
@@ -749,6 +757,7 @@ function renderExpenseTable(expenses) {
         <span class="item-title">${escapeHtml(expense.name)}</span>
         ${expense.description ? `<span class="item-description">${escapeHtml(expense.description)}</span>` : ""}
       </td>
+      <td class="date-cell" data-label="Data">${expense.date ? `<span title="${expense.date.split("-").reverse().join("/")}">${expense.date.split("-").slice(1).reverse().join("/")}</span>` : "—"}</td>
       <td class="category-cell" data-label="Categoria">${escapeHtml(expense.category)}</td>
       <td class="numeric value-cell" data-label="Valor">${formatCurrency(expense.value)}</td>
       <td class="actions-cell" data-label="Ações">
@@ -969,6 +978,7 @@ function confirmOfxImport() {
         value: draft.value,
         description: draft.description,
         month: draft.month,
+        date: isValidDate(draft.date) ? draft.date : undefined,
         createdAt: new Date().toISOString(),
         source: "ofx",
         sourceId: draft.sourceId,

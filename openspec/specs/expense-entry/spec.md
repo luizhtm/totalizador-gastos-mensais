@@ -105,7 +105,7 @@ The application SHALL require each expense to use one of the fixed categories.
 
 ### Requirement: Sort Expense List
 
-The application SHALL allow the user to sort the selected month's expense list by item, category, or value.
+The application SHALL allow the user to sort the selected month's expense list by item, category, value, or date.
 
 #### Scenario: Default sorting
 
@@ -116,7 +116,7 @@ The application SHALL allow the user to sort the selected month's expense list b
 #### Scenario: Sorting by a list field
 
 - **GIVEN** the selected month has multiple expenses
-- **WHEN** the user chooses the item, category, or value sort field
+- **WHEN** the user chooses the item, category, value, or date sort field
 - **THEN** the expense list SHALL reorder by the chosen field
 - **AND** keep the sorting scoped to the selected month
 
@@ -136,6 +136,26 @@ The application SHALL allow the user to sort the selected month's expense list b
 
 - **GIVEN** two expenses have the same value for the active sort field
 - **WHEN** the list is sorted
+- **THEN** the application SHALL use item ascending as the secondary ordering
+
+#### Scenario: Sorting by date ascending
+
+- **GIVEN** the selected month has multiple expenses with dates
+- **WHEN** the user chooses the date sort field
+- **THEN** the expense list SHALL reorder by date in ascending order (oldest first)
+- **AND** expenses without a date SHALL appear last
+- **AND** keep the sorting scoped to the selected month
+
+#### Scenario: Toggling date sort direction
+
+- **GIVEN** the date sort field is active
+- **WHEN** the user chooses the date sort field again
+- **THEN** the application SHALL toggle between ascending (oldest first) and descending (newest first)
+
+#### Scenario: Tie-breaking date sort
+
+- **GIVEN** two expenses have the same date
+- **WHEN** the list is sorted by date
 - **THEN** the application SHALL use item ascending as the secondary ordering
 
 ### Requirement: Select Multiple Expenses

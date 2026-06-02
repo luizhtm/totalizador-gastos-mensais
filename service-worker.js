@@ -1,12 +1,12 @@
-const APP_CACHE_VERSION = "2026.05.27.10";
+const APP_CACHE_VERSION = "2026.06.02.01";
 const APP_CACHE_NAME = `gastos-mensais-${APP_CACHE_VERSION}`;
 
 const APP_SHELL_URLS = [
   "./",
   "./index.html",
   "./vendor/pico/pico.min.css",
-  "./styles.css?v=20260527-form-enter",
-  "./app.js?v=20260527-form-enter",
+  "./styles.css?v=20260602-date",
+  "./app.js?v=20260602-date",
   "./app-core.js",
   "./ofx-category-rules.js",
   "./site.webmanifest",
