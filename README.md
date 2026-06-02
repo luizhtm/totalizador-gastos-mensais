@@ -68,3 +68,7 @@ O app registra `service-worker.js` para cache offline dos arquivos estáticos pr
 ## Deploy
 
 O projeto é publicado como site estático no GitHub Pages. O workflow de deploy fica em `.github/workflows/pages.yml`.
+
+## TODOs
+
+- **Data da transação** — Adicionar campo de data (read-only) no formulário de cadastro/edição de gasto, preenchido com a data atual ao adicionar e mantendo a data original ao editar. Na listagem, exibir a data em uma nova coluna. Na importação OFX, preservar a data da transação já extraída do extrato.
