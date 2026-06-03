@@ -71,4 +71,4 @@ O projeto é publicado como site estático no GitHub Pages. O workflow de deploy
 
 ## TODOs
 
-- **Data da transação** — Adicionar campo de data (read-only) no formulário de cadastro/edição de gasto, preenchido com a data atual ao adicionar e mantendo a data original ao editar. Na listagem, exibir a data em uma nova coluna. Na importação OFX, preservar a data da transação já extraída do extrato.
+- ~~**Data da transação** — Adicionar campo de data (read-only) no formulário de cadastro/edição de gasto, preenchido com a data atual ao adicionar e mantendo a data original ao editar. Na listagem, exibir a data em uma nova coluna (formato DD/MM, com data completa no hover). Na importação OFX, preservar a data da transação já extraída do extrato. Ordenação por data incluída.~~ ✅
