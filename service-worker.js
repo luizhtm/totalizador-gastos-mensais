@@ -1,4 +1,4 @@
-const APP_CACHE_VERSION = "2026.06.02.01";
+const APP_CACHE_VERSION = "2026.06.02.02";
 const APP_CACHE_NAME = `gastos-mensais-${APP_CACHE_VERSION}`;
 
 const APP_SHELL_URLS = [

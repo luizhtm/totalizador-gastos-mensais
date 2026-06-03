@@ -17,3 +17,11 @@ Use this directory as the source of truth for product behavior.
 - Use `GIVEN`, `WHEN`, `THEN`, and `AND` bullets.
 - Prefer one focused capability per folder.
 - Keep wording stable and testable.
+
+## Cache Busting
+
+After changing `app.js`, `styles.css`, or `index.html`, force a Service Worker cache update:
+
+1. Bump `APP_CACHE_VERSION` in `service-worker.js`.
+2. Update `?v=` query params on `styles.css` and `app.js` in both `service-worker.js` (APP_SHELL_URLS) and `index.html` to match the same version string.
+3. Users must hard refresh (`Cmd+Shift+R`) or unregister the SW via DevTools → Application → Service Workers.
