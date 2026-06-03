@@ -7,7 +7,7 @@ export const OFX_CATEGORY_RULES = [
   { category: "Assinaturas", keywords: ["netflix", "spotify", "google", "apple", "assinatura", "prime", "disney", "hbo", "max"] },
   { category: "Contas da casa", keywords: ["energia", "luz", "agua", "água", "internet", "telefone", "celular", "gas", "gás"] },
   { category: "Educação", keywords: ["escola", "faculdade", "curso", "alura", "udemy", "educacao", "educação"] },
-  { category: "Compras", keywords: ["amazon", "mercado livre", "shopee", "compra", "magazine", "magalu", "marketp"] },
+  { category: "Compras", keywords: ["amazon", "mercado livre", "shopee", "compra", "magazine", "magalu", "marketp", "shpp"] },
   { category: "Viagens", keywords: ["hotel", "airbnb", "booking", "passagem", "latam", "gol", "azul"] },
   { category: "Cuidados pessoais", keywords: ["barbearia", "salao", "salão", "cabelo", "academia"] },
   { category: "Pets", keywords: ["pet", "veterinario", "veterinário", "racao", "ração"] },
