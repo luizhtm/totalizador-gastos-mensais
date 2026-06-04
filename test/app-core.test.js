@@ -2,10 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  CATEGORIES,
   createOfxDrafts,
   formatMoneyInput,
+  formatMonthLabel,
   getCategoryTotals,
   getCurrentDate,
+  getMonthlyComparison,
   getTopCategory,
   isValidDate,
   maskMoneyInputValue,
@@ -264,4 +267,38 @@ test("normalizes stored expenses and merges backups by id", () => {
     { id: "1", name: "B" },
     { id: "2", name: "C" },
   ]);
+});
+
+test("groups expenses by month and category for comparison", () => {
+  const expenses = [
+    { month: "2026-05", category: "Alimentação", value: 400 },
+    { month: "2026-05", category: "Transporte", value: 100 },
+    { month: "2026-06", category: "Alimentação", value: 350 },
+    { month: "2026-06", category: "Transporte", value: 200 },
+    { month: "2026-06", category: "Lazer", value: 80 },
+  ];
+
+  const { months, rows, monthTotals } = getMonthlyComparison(expenses);
+
+  assert.deepEqual(months, ["2026-05", "2026-06"]);
+  assert.equal(rows.length, 3);
+
+  const alimento = rows.find((r) => r.category === "Alimentação");
+  assert.deepEqual(alimento.values, [400, 350]);
+
+  const transporte = rows.find((r) => r.category === "Transporte");
+  assert.deepEqual(transporte.values, [100, 200]);
+
+  const lazer = rows.find((r) => r.category === "Lazer");
+  assert.deepEqual(lazer.values, [0, 80]);
+
+  assert.equal(monthTotals.get("2026-05"), 500);
+  assert.equal(monthTotals.get("2026-06"), 630);
+
+  const countRows = rows.length;
+  const expectedCategories = CATEGORIES.filter((c) => {
+    if (c === "Alimentação" || c === "Transporte" || c === "Lazer") return true;
+    return expenses.some((e) => e.category === c && e.value > 0);
+  }).length;
+  assert.equal(rows.length, 3);
 });

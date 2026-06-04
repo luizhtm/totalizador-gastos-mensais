@@ -57,8 +57,8 @@
       })();
     </script>
     <link rel="stylesheet" href="vendor/pico/pico.min.css">
-    <link rel="stylesheet" href="styles.css?v=20260602-date">
-    <script type="module" src="app.js?v=20260602-date"></script>
+    <link rel="stylesheet" href="styles.css?v=20260604">
+    <script type="module" src="app.js?v=20260604"></script>
   </head>
   <body>
     <header class="site-header">
@@ -181,7 +181,31 @@
         </article>
       </section>
 
+      <article id="comparisonCTA" hidden>
+        <div>
+          <h2>Comparativo mensal</h2>
+          <p>Veja a evolução dos gastos por categoria entre os meses.</p>
+        </div>
+        <button id="comparisonToggleButton" type="button">Comparar meses</button>
+      </article>
+
       <div id="feedback" class="toast-region" role="status" aria-live="polite" aria-label="Notificações"></div>
+
+      <section id="comparisonSection" class="panel" hidden>
+        <header class="panel-heading">
+          <div>
+            <h2>Comparativo mensal</h2>
+            <p>Gastos por categoria ao longo dos meses.</p>
+          </div>
+        </header>
+        <div id="comparisonTableWrap">
+          <table id="comparisonTable">
+            <thead id="comparisonTableHead"></thead>
+            <tbody id="comparisonTableBody"></tbody>
+          </table>
+        </div>
+        <p id="comparisonEmpty" hidden>Nenhum gasto registrado para comparar.</p>
+      </section>
 
       <section class="action-panel" aria-label="Ações do totalizador">
         <div>

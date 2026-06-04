@@ -10,6 +10,7 @@ import {
   getCurrentDate,
   getCurrentMonth,
   getExistingImportKeys,
+  getMonthlyComparison,
   getTopCategory,
   isValidDate,
   isValidMonth,
@@ -42,6 +43,7 @@ const state = {
     direction: "asc",
   },
   selectedExpenseIds: new Set(),
+  showComparison: false,
 };
 
 const elements = {
@@ -83,6 +85,12 @@ const elements = {
   applyBulkCategoryButton: document.querySelector("#applyBulkCategoryButton"),
   removeSelectedExpensesButton: document.querySelector("#removeSelectedExpensesButton"),
   exportButton: document.querySelector("#exportButton"),
+  comparisonCTA: document.querySelector("#comparisonCTA"),
+  comparisonToggleButton: document.querySelector("#comparisonToggleButton"),
+  comparisonSection: document.querySelector("#comparisonSection"),
+  comparisonTableHead: document.querySelector("#comparisonTableHead"),
+  comparisonTableBody: document.querySelector("#comparisonTableBody"),
+  comparisonEmpty: document.querySelector("#comparisonEmpty"),
   importInput: document.querySelector("#importInput"),
   ofxInput: document.querySelector("#ofxInput"),
   mergeImportInput: document.querySelector("#mergeImportInput"),
@@ -152,6 +160,7 @@ function bindEvents() {
   elements.cancelEditButton.addEventListener("click", closeExpenseDialog);
   elements.closeDialogButton.addEventListener("click", closeExpenseDialog);
   elements.expenseDialog.addEventListener("close", resetForm);
+  elements.comparisonToggleButton.addEventListener("click", toggleComparison);
   elements.exportButton.addEventListener("click", exportBackup);
   elements.importInput.addEventListener("change", importBackup);
   elements.ofxInput.addEventListener("change", handleOfxImportFile);
@@ -332,6 +341,16 @@ function setExpenseSort(field) {
   }
 
   render();
+}
+
+function toggleComparison() {
+  state.showComparison = !state.showComparison;
+  render();
+}
+
+function updateComparisonCTA() {
+  const months = new Set(state.expenses.map((e) => e.month));
+  elements.comparisonCTA.hidden = months.size < 2;
 }
 
 function populateCategories() {
@@ -613,6 +632,8 @@ function render() {
   renderBulkActions(monthExpenses);
   renderCategorySummary(categoryTotals, total);
   renderExpenseTable(monthExpenses);
+  renderComparison();
+  updateComparisonCTA();
 }
 
 function renderBulkActions(monthExpenses) {
@@ -783,6 +804,46 @@ function renderExpenseTable(expenses) {
       </td>
     </tr>
   `).join("");
+}
+
+function renderComparison() {
+  const isVisible = state.showComparison && state.expenses.length > 0;
+
+  elements.comparisonSection.hidden = !state.showComparison;
+  elements.comparisonEmpty.hidden = state.expenses.length > 0;
+
+  if (!isVisible) {
+    return;
+  }
+
+  const { months, rows: categoryRows, monthTotals } = getMonthlyComparison(state.expenses);
+
+  elements.comparisonTableHead.innerHTML = `
+    <tr>
+      <th class="comparison-category-cell">Categoria</th>
+      ${months.map((month) => `<th class="comparison-month-cell numeric">${formatMonthLabel(month)}</th>`).join("")}
+    </tr>
+  `;
+
+  let rows = categoryRows.map(({ category, values }) => {
+    return `
+      <tr>
+        <td class="comparison-category-cell">${category}</td>
+        ${values.map((value) => `
+          <td class="numeric comparison-value-cell">${value > 0 ? formatCurrency(value) : "—"}</td>
+        `).join("")}
+      </tr>
+    `;
+  }).join("");
+
+  rows += `
+    <tr class="comparison-total-row">
+      <td class="comparison-category-cell">Total</td>
+      ${months.map((month) => `<td class="numeric comparison-value-cell">${formatCurrency(monthTotals.get(month))}</td>`).join("")}
+    </tr>
+  `;
+
+  elements.comparisonTableBody.innerHTML = rows;
 }
 
 function getSelectedMonthExpenses() {

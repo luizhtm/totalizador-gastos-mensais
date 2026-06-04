@@ -39,6 +39,36 @@ export function getCategoryTotals(expenses) {
   return [...totals.entries()].map(([category, total]) => ({ category, total }));
 }
 
+export function getMonthlyComparison(expenses) {
+  const months = [...new Set(expenses.map((e) => e.month))].sort();
+  const totalsByMonth = new Map();
+
+  for (const expense of expenses) {
+    if (!totalsByMonth.has(expense.month)) {
+      totalsByMonth.set(expense.month, new Map());
+    }
+    const categoryTotals = totalsByMonth.get(expense.month);
+    categoryTotals.set(expense.category, (categoryTotals.get(expense.category) || 0) + expense.value);
+  }
+
+  const monthTotals = new Map(months.map((m) => [m, 0]));
+
+  const rows = CATEGORIES.map((category) => {
+    const values = months.map((month) => totalsByMonth.get(month)?.get(category) || 0);
+    const hasAny = values.some((v) => v > 0);
+
+    if (!hasAny) return null;
+
+    for (let i = 0; i < months.length; i++) {
+      monthTotals.set(months[i], monthTotals.get(months[i]) + values[i]);
+    }
+
+    return { category, values };
+  }).filter(Boolean);
+
+  return { months, rows, monthTotals };
+}
+
 export function getTopCategory(categoryTotals) {
   return categoryTotals.reduce((currentTop, item) => {
     if (!currentTop || item.total > currentTop.total) {
