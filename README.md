@@ -14,8 +14,10 @@ Aplicação estática para registrar, importar e totalizar gastos mensais direta
 
 - Cadastro, edição, remoção e seleção em massa de gastos
 - Total mensal e resumo por categoria
-- Ordenação por item, categoria e valor
-- Importação OFX com revisão antes de salvar
+- Ordenação por item, categoria, valor e data
+- Data da transação no formulário e na listagem (DD/MM com data completa no hover)
+- Importação OFX com preservação da data original da transação
+- Comparativo mensal: tabela de gastos por categoria entre meses com scroll horizontal
 - Exportação e importação de backup em `.gastos.json`
 - Alternância entre tema claro, escuro e automático
 - Execução sem backend, login ou banco de dados
@@ -69,6 +71,4 @@ O app registra `service-worker.js` para cache offline dos arquivos estáticos pr
 
 O projeto é publicado como site estático no GitHub Pages. O workflow de deploy fica em `.github/workflows/pages.yml`.
 
-## TODOs
 
-- ~~**Data da transação** — Adicionar campo de data (read-only) no formulário de cadastro/edição de gasto, preenchido com a data atual ao adicionar e mantendo a data original ao editar. Na listagem, exibir a data em uma nova coluna (formato DD/MM, com data completa no hover). Na importação OFX, preservar a data da transação já extraída do extrato. Ordenação por data incluída.~~ ✅
