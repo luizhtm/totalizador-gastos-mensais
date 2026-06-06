@@ -391,6 +391,8 @@ function handleFormSubmit(event) {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     });
+    state.selectedMonth = expense.month;
+    elements.monthInput.value = expense.month;
     showFeedback("Gasto adicionado.", "success");
   }
 
@@ -417,7 +419,7 @@ function readFormExpense() {
     value,
     date,
     description: elements.descriptionInput.value.trim(),
-    month: state.selectedMonth,
+    month: date.slice(0, 7),
   };
 }
 
@@ -435,6 +437,7 @@ function startEdit(id) {
   elements.categoryInput.value = expense.category;
   elements.valueInput.value = formatMoneyInput(expense.value);
   elements.dateInput.value = isValidDate(expense.date) ? expense.date : "";
+  elements.dateInput.disabled = true;
   elements.descriptionInput.value = expense.description || "";
   elements.formTitle.textContent = "Editar gasto";
   elements.submitButton.textContent = "Salvar alterações";
@@ -449,6 +452,7 @@ function resetForm() {
   elements.valueInput.value = "";
   elements.categoryInput.value = "";
   elements.dateInput.value = getCurrentDate();
+  elements.dateInput.disabled = false;
   elements.formTitle.textContent = "Adicionar gasto";
   elements.submitButton.textContent = "Adicionar";
   updateFormSubmitState();

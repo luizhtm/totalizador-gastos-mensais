@@ -4,14 +4,21 @@
 
 ### Requirement: Transaction Date on Add
 
-The application SHALL show a read-only date field when adding a new expense.
+The application SHALL show an editable date field when adding a new expense, defaulting to today's date.
 
 #### Scenario: Date field in add mode
 
 - **GIVEN** the add expense modal is open
 - **WHEN** the form is rendered
-- **THEN** the application SHALL display a date field with today's date
-- **AND** the date field SHALL be read-only
+- **THEN** the application SHALL display a date field with today's date pre-filled
+- **AND** the date field SHALL be editable
+
+#### Scenario: User changes the date on add
+
+- **GIVEN** the add expense modal is open
+- **WHEN** the user picks a different date
+- **THEN** the application SHALL accept the user-chosen date
+- **AND** the new expense SHALL be saved with that date
 
 ### Requirement: Transaction Date on Edit
 
@@ -28,7 +35,7 @@ The application SHALL show the saved transaction date as a read-only field when 
 
 - **GIVEN** the edit expense modal is open for an expense without a saved date
 - **WHEN** the form is rendered
-- **THEN** the application SHALL display the date field empty or with `—`
+- **THEN** the application SHALL display the date field empty
 - **AND** the date field SHALL be read-only
 
 ### Requirement: Date in Expense List

@@ -2,31 +2,25 @@
 
 ## Purpose
 
-Totalizador de Gastos Mensais is a static, client-side web app for recording monthly expenses and reading a simple monthly summary.
+Totalizador de Gastos Mensais is a static, client-side web app for recording, importing, and comparing monthly expenses. It focuses on clarity and low maintenance, with no backend, login, or build step.
 
 The project prioritizes clarity, low maintenance, and GitHub Pages publishing over framework complexity.
 
 ## Stack
 
-- HTML served as static files
-- Pico CSS from CDN, with local CSS overrides
-- Vanilla JavaScript
+- HTML, CSS, and vanilla JavaScript served as static files
+- Pico CSS served locally in `vendor/pico/pico.min.css`
 - Browser `localStorage`
+- Service Worker for offline caching
 - GitHub Actions deploy to GitHub Pages
-
-## Product Principles
-
-- Keep the main screen optimized for reading totals and registered items.
-- Keep expense entry focused and quick.
-- Avoid login, backend services, databases, and build steps.
-- Preserve user control over data through local storage and export/import.
-- Prefer explicit, predictable UI behavior over clever automation.
 
 ## Implementation Notes
 
 - `index.html` owns document structure and static UI.
 - `styles.css` owns Pico overrides, layout, modal styling, and responsive behavior.
-- `app.js` owns state, persistence, rendering, validation, import/export, and user interactions.
+- `app-core.js` owns pure business logic (grouping, sorting, OFX parsing, validation).
+- `app.js` owns state, persistence, rendering, import/export, and user interactions.
+- `service-worker.js` caches static assets for offline use.
 - Data is stored only in the current browser unless exported by the user.
 
 ## OpenSpec Usage

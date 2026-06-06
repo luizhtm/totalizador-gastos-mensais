@@ -30,8 +30,10 @@ Aplicação estática para registrar, importar e totalizar gastos mensais direta
 ├── app.js
 ├── index.html
 ├── ofx-category-rules.js
+├── service-worker.js
 ├── styles.css
 ├── test/
+├── vendor/
 └── openspec/
 ```
 

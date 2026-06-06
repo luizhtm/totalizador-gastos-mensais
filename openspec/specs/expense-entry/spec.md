@@ -21,10 +21,12 @@ The application SHALL allow the user to add an expense for the selected month.
 
 #### Scenario: Saving a new expense
 
-- **GIVEN** the expense modal is open
+- **GIVEN** the expense modal is open with today's date pre-filled in the date field
 - **WHEN** the user enters a name, category, positive value, and optional description
+- **AND** optionally changes the date to a different day
 - **AND** the user submits the form
-- **THEN** the application SHALL save the expense for the selected month
+- **THEN** the application SHALL save the expense for the month derived from the chosen date
+- **AND** switch the selected month to that month
 - **AND** close the modal
 - **AND** update all monthly summaries and lists
 
@@ -102,6 +104,32 @@ The application SHALL require each expense to use one of the fixed categories.
 - **WHEN** the user opens the category field
 - **THEN** the application SHALL show the predefined category list
 - **AND** include `Outros` for expenses that do not fit the main categories
+
+### Requirement: Transaction Date
+
+The application SHALL include a date field in the expense form.
+
+#### Scenario: Date field in add mode
+
+- **GIVEN** the add expense modal is open
+- **WHEN** the form is rendered
+- **THEN** the application SHALL display a date field with today's date pre-filled
+- **AND** the date field SHALL be editable
+
+#### Scenario: User changes the date on add
+
+- **GIVEN** the add expense modal is open
+- **WHEN** the user picks a different date
+- **THEN** the application SHALL accept the user-chosen date
+- **AND** save the expense for the month derived from that date
+- **AND** switch the selected month to that month
+
+#### Scenario: Date field in edit mode
+
+- **GIVEN** the edit expense modal is open
+- **WHEN** the form is rendered
+- **THEN** the application SHALL display the date field populated with the saved date
+- **AND** the date field SHALL be read-only
 
 ### Requirement: Sort Expense List
 
